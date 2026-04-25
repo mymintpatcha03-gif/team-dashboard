@@ -2181,68 +2181,176 @@ body.dark-mode .admin-card-v14 .admin-v14-mini-list .rank-row .admin-detail-valu
       return safeText(value, '').trim().toLowerCase().replace(/\s+/g, '');
     }
 
-    function getDateKey(value) {
-      if (!value) return '';
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return '';
-      return new Intl.DateTimeFormat('en-CA', {
-        timeZone: 'Asia/Bangkok',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }).format(date);
+ function getBangkokTodayKey() {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Bangkok',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(new Date());
+}
+
+function getSelectedYear() {
+  const monthKey = monthSelect?.value || '';
+  const monthData = dashboardData?.months?.[monthKey];
+  const label = `${monthKey} ${monthData?.label || ''}`;
+
+  const yearMatch = label.match(/(20\d{2}|25\d{2})/);
+  if (yearMatch) {
+    const y = Number(yearMatch[1]);
+    return y > 2400 ? y - 543 : y;
+  }
+
+  return new Date().getFullYear();
+}
+
+function getDateKey(value) {
+  if (value === null || value === undefined || String(value).trim() === '') return '';
+
+  const raw = String(value).trim();
+
+  const monthMap = {
+    jan: '01', january: '01',
+    feb: '02', february: '02',
+    mar: '03', march: '03',
+    apr: '04', april: '04',
+    may: '05',
+    jun: '06', june: '06',
+    jul: '07', july: '07',
+    aug: '08', august: '08',
+    sep: '09', sept: '09', september: '09',
+    oct: '10', october: '10',
+    nov: '11', november: '11',
+    dec: '12', december: '12'
+  };
+
+  // 25-Apr / 25 Apr / 25-Apr-2026
+  const shortMatch = raw.match(/^(\d{1,2})[\s\-\/]+([A-Za-z]{3,9})(?:[\s\-\/]+(\d{2,4}))?$/);
+  if (shortMatch) {
+    const day = shortMatch[1].padStart(2, '0');
+    const month = monthMap[shortMatch[2].toLowerCase()];
+    let year = shortMatch[3] ? Number(shortMatch[3]) : getSelectedYear();
+
+    if (year < 100) year += 2000;
+    if (year > 2400) year -= 543;
+
+    if (month) return `${year}-${month}-${day}`;
+  }
+
+  // 2026-4-25 / 2026/04/25
+  const isoMatch = raw.match(/^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})/);
+  if (isoMatch) {
+    let year = Number(isoMatch[1]);
+    if (year > 2400) year -= 543;
+    return `${year}-${isoMatch[2].padStart(2, '0')}-${isoMatch[3].padStart(2, '0')}`;
+  }
+
+  const date = new Date(raw);
+  if (!Number.isNaN(date.getTime())) {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Bangkok',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(date);
+  }
+
+  return '';
+}
+
+function isTodayLead(row) {
+  const todayKey = getBangkokTodayKey();
+
+  const possibleDates = [
+    row?.date,
+    row?.dateLabel,
+    row?.dateText,
+    row?.createdAt,
+    row?.timestamp,
+    row?.dateTime
+  ];
+
+  return possibleDates.some((value) => getDateKey(value) === todayKey);
+}
+
+function getLeadOwnerForToday(row) {
+  return normalizeNameForMatch(
+    row?.addedBy ||
+    row?.adminTab ||
+    row?.sheetName ||
+    row?.sheet ||
+    row?.tabName ||
+    row?.adminName ||
+    row?.ownerName ||
+    row?.owner
+  );
+}
+
+function getTodayLeadCount(item, monthData) {
+  const adminName = normalizeNameForMatch(item?.adminName);
+
+  const adminViewRows =
+    Array.isArray(monthData?.views?.[item?.adminName]?.recentLeads)
+      ? monthData.views[item.adminName].recentLeads
+      : [];
+
+  const allRows = [
+    ...(Array.isArray(monthData?.views?.All?.recentLeads) ? monthData.views.All.recentLeads : []),
+    ...adminViewRows,
+    ...(Array.isArray(monthData?.allLeads) ? monthData.allLeads : []),
+    ...(Array.isArray(monthData?.leads) ? monthData.leads : []),
+    ...(Array.isArray(monthData?.rows) ? monthData.rows : [])
+  ];
+
+  const seen = new Set();
+
+  const todayFromRows = allRows.reduce((count, row, index) => {
+    const rowIdentity = [
+      row?.no,
+      row?.date,
+      row?.dateLabel,
+      row?.dateText,
+      row?.phone,
+      row?.name,
+      row?.inboxName,
+      row?.source,
+      row?.link
+    ].join('|') || String(index);
+
+    if (seen.has(rowIdentity)) return count;
+    seen.add(rowIdentity);
+
+    if (!isTodayLead(row)) return count;
+
+    const isInAdminView = adminViewRows.includes(row);
+    if (isInAdminView) return count + 1;
+
+    const owner = getLeadOwnerForToday(row);
+    return owner === adminName ? count + 1 : count;
+  }, 0);
+
+  const todayKeys = [
+    'today',
+    'todayLeads',
+    'todayLead',
+    'leadsToday',
+    'dailyLeads',
+    'todayTotal',
+    'todayCount'
+  ];
+
+  let directValue = null;
+
+  for (const key of todayKeys) {
+    const value = safeNumber(item?.[key], NaN);
+    if (Number.isFinite(value)) {
+      directValue = value;
+      break;
     }
+  }
 
-    function isTodayLead(row) {
-      const todayKey = getDateKey(new Date());
-      const rowKey = getDateKey(row?.date || row?.createdAt || row?.timestamp || row?.dateTime);
-      if (rowKey) return rowKey === todayKey;
-
-      const todayThai = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Asia/Bangkok',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      }).format(new Date()).replace(/\s+/g, '');
-
-      const label = safeText(row?.dateLabel || row?.dateText || '', '').replace(/\s+/g, '');
-      return label && label === todayThai;
-    }
-
-    function getLeadOwnerForToday(row) {
-      return normalizeNameForMatch(row?.addedBy || row?.adminTab || row?.adminName || row?.owner || row?.ownerName);
-    }
-
-    function getTodayLeadCount(item, monthData) {
-      const adminName = normalizeNameForMatch(item?.adminName);
-      const allRows = [
-        ...(Array.isArray(monthData?.views?.All?.recentLeads) ? monthData.views.All.recentLeads : []),
-        ...(Array.isArray(monthData?.allLeads) ? monthData.allLeads : []),
-        ...(Array.isArray(monthData?.leads) ? monthData.leads : []),
-        ...(Array.isArray(monthData?.rows) ? monthData.rows : [])
-      ];
-
-      const seen = new Set();
-      const todayFromRows = allRows.reduce((count, row, index) => {
-        const rowIdentity = [row?.no, row?.date, row?.dateLabel, row?.phone, row?.name, row?.inboxName].join('|') || String(index);
-        if (seen.has(rowIdentity)) return count;
-        seen.add(rowIdentity);
-        if (!isTodayLead(row)) return count;
-        return getLeadOwnerForToday(row) === adminName ? count + 1 : count;
-      }, 0);
-
-      const todayKeys = ['today', 'todayLeads', 'todayLead', 'leadsToday', 'dailyLeads', 'todayTotal', 'todayCount'];
-      let directValue = null;
-      for (const key of todayKeys) {
-        const value = safeNumber(item?.[key], NaN);
-        if (Number.isFinite(value)) {
-          directValue = value;
-          break;
-        }
-      }
-
-      return todayFromRows > 0 ? todayFromRows : (directValue ?? 0);
-    }
+  return todayFromRows > 0 ? todayFromRows : (directValue ?? 0);
+}
 
     function renderAdminPerformance(items, monthData) {
       const container = document.getElementById('adminPerformanceList');
