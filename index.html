@@ -971,7 +971,7 @@
     .badge-contacted { background: #e7fbef; color: #167a45; }
     .badge-consulted { background: #e4edf7; color: #4c90f6; }
     .badge-closed { background: #f2e9ff; color: #df361c; }
-    .badge-other { background: #eacfcb; color: #090904; }
+    .badge-other { background: #f7f1d5; color: #31312f; }
 
     .empty-state {
       padding: 28px;
@@ -1566,7 +1566,117 @@ body.dark-mode .admin-card-v14 .admin-v14-mini-list .rank-row .admin-detail-valu
 .live-pill .live-dot{width:9px;height:9px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 5px rgba(34,197,94,.13);animation:livePulse 1.4s ease-in-out infinite}.live-pill.syncing .live-dot{background:#f59e0b;box-shadow:0 0 0 5px rgba(245,158,11,.14)}.live-pill.error .live-dot{background:#ef4444;box-shadow:0 0 0 5px rgba(239,68,68,.14)}@keyframes livePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.72);opacity:.62}}
 .chart-section{display:grid;grid-template-columns:1.55fr .85fr;gap:16px;margin:0 0 18px}.chart-card-pro{position:relative;overflow:hidden;min-height:315px;background:rgba(255,255,255,.90);border:1px solid rgba(210,224,244,.95);border-radius:26px;box-shadow:0 16px 42px rgba(36,75,134,.10);padding:18px;animation:v12FadeUp .42s ease both}.chart-card-pro::after{content:"";position:absolute;width:190px;height:190px;border-radius:999px;right:-72px;top:-72px;background:radial-gradient(circle,rgba(59,130,246,.16),transparent 68%);pointer-events:none}.chart-header-pro{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}.chart-header-pro h3{margin:0;font-size:18px;letter-spacing:-.02em}.chart-header-pro p{margin:5px 0 0;color:var(--muted);font-size:12px;font-weight:800}.chart-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.chart-toggle{height:36px;border-radius:14px;padding:0 12px;background:linear-gradient(180deg,#fff,#f7fbff);border:1px solid var(--line);color:var(--text);font-size:12px;font-weight:900;box-shadow:0 10px 22px rgba(36,75,134,.06);cursor:pointer}.chart-toggle.active{background:linear-gradient(135deg,#1f5eff,#3d8dff);color:#fff;border-color:transparent}.chart-canvas-wrap{position:relative;z-index:1;height:220px}#leadTrendCanvas{width:100%;height:100%;display:block}.chart-empty{position:absolute;inset:0;display:none;place-items:center;color:var(--muted);font-weight:900;font-size:13px}.chart-card-pro.is-empty .chart-empty{display:grid}.chart-insights{display:grid;grid-template-columns:1fr;gap:12px}.insight-box{position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(210,224,244,.95);background:linear-gradient(135deg,#fff 0%,#f7fbff 100%);box-shadow:0 16px 38px rgba(36,75,134,.08);padding:16px}.insight-box::after{content:"";position:absolute;width:76px;height:76px;border-radius:999px;right:-26px;top:-26px;background:rgba(37,99,235,.10)}.insight-label{position:relative;z-index:1;color:var(--muted);font-size:12px;font-weight:950;margin-bottom:8px}.insight-value{position:relative;z-index:1;color:#082b4f;font-size:28px;font-weight:950;line-height:1;letter-spacing:-.04em}.insight-sub{position:relative;z-index:1;color:var(--muted);font-size:12px;font-weight:800;margin-top:8px;line-height:1.35}.insight-box.hot{background:linear-gradient(135deg,#fff7ed 0%,#fff 100%);border-color:rgba(245,158,11,.22)}.insight-box.hot::after{background:rgba(245,158,11,.14)}.insight-box.good{background:linear-gradient(135deg,#f0fdf4 0%,#fff 100%);border-color:rgba(22,163,74,.18)}.insight-box.good::after{background:rgba(22,163,74,.12)}.chart-card-pro:hover,.insight-box:hover{transform:translateY(-3px);box-shadow:0 22px 52px rgba(36,75,134,.13);transition:.22s ease}.toast.alert-hot{border-color:rgba(239,68,68,.22)}.toast.alert-good{border-color:rgba(22,163,74,.20)}body.dark-mode .live-pill{background:rgba(15,23,42,.76);border-color:rgba(34,197,94,.24);color:#bbf7d0}body.dark-mode .chart-card-pro,body.dark-mode .insight-box{background:linear-gradient(180deg,rgba(30,41,59,.94) 0%,rgba(15,23,42,.94) 100%)!important;border-color:rgba(148,163,184,.20)!important;color:#eaf2ff!important}body.dark-mode .chart-header-pro h3,body.dark-mode .insight-value{color:#eaf2ff!important}body.dark-mode .chart-header-pro p,body.dark-mode .insight-label,body.dark-mode .insight-sub{color:#9fb0c9!important}body.dark-mode .chart-toggle{background:rgba(15,23,42,.76);border-color:rgba(148,163,184,.20);color:#eaf2ff}body.dark-mode .chart-toggle.active{background:linear-gradient(135deg,#2563eb,#60a5fa);color:#fff}@media(max-width:1320px){.chart-section{grid-template-columns:1fr}.chart-insights{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:720px){.chart-insights{grid-template-columns:1fr}.chart-header-pro{flex-direction:column}.chart-tools{justify-content:flex-start}.chart-canvas-wrap{height:200px}}
 
-</style>
+
+
+/* ===== V15 Raw lead pancake admin insights ===== */
+.admin-performance-grid.admin-raw-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.admin-raw-panel { margin-top: 12px; display: grid; gap: 10px; }
+.admin-raw-section { border: 1px solid #e7eef8; border-radius: 18px; background: rgba(255,255,255,.94); padding: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,.85); }
+.admin-raw-title { display: flex; justify-content: space-between; align-items: center; gap: 10px; color: #7890ae; font-size: 11px; font-weight: 950; text-transform: uppercase; letter-spacing: .03em; margin-bottom: 9px; }
+.admin-raw-title strong { color: #082b4f; font-size: 13px; }
+.admin-chip-cloud { display: flex; flex-wrap: wrap; gap: 7px; }
+.admin-chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 7px 10px; background: #f4f8ff; border: 1px solid #e2ebf8; color: #355170; font-size: 11px; font-weight: 900; max-width: 100%; }
+.admin-chip b { color: #082b4f; font-size: 13px; }
+.admin-chip.top-recipient { background: linear-gradient(135deg,#fff7ed,#ffedd5); border-color: rgba(245,158,11,.28); color:#b45309; }
+.admin-source-bars { display: grid; gap: 8px; }
+.admin-source-row { display: grid; grid-template-columns: 54px 1fr 34px; align-items: center; gap: 8px; font-size: 11px; font-weight: 950; color:#7890ae; }
+.admin-source-track { height: 8px; border-radius: 999px; background: #edf3fb; overflow:hidden; }
+.admin-source-fill { height:100%; border-radius:inherit; background: linear-gradient(90deg,#2563eb,#60a5fa); }
+.admin-source-row.ig .admin-source-fill { background: linear-gradient(90deg,#db2777,#f472b6); }
+.admin-source-row.line .admin-source-fill { background: linear-gradient(90deg,#16a34a,#86efac); }
+.admin-source-row.other .admin-source-fill { background: linear-gradient(90deg,#64748b,#cbd5e1); }
+.admin-today-list { display: grid; gap: 6px; }
+.admin-today-item { display:flex; justify-content:space-between; gap:10px; font-size:12px; font-weight:900; color:#355170; }
+.admin-today-item span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.admin-today-item b { color:#082b4f; }
+body.dark-mode .admin-raw-section { background: rgba(15,23,42,.76) !important; border-color: rgba(148,163,184,.20) !important; }
+body.dark-mode .admin-raw-title strong, body.dark-mode .admin-chip b, body.dark-mode .admin-today-item b { color:#eaf2ff !important; }
+body.dark-mode .admin-chip, body.dark-mode .admin-today-item { background: rgba(15,23,42,.62) !important; border-color: rgba(148,163,184,.20) !important; color:#cbd5e1 !important; }
+body.dark-mode .admin-source-track { background: rgba(148,163,184,.18) !important; }
+
+.admin-card-v14 .admin-card-name { white-space: normal !important; overflow: visible !important; text-overflow: clip !important; line-height: 1.12 !important; }
+@media (max-width: 1320px) { .admin-performance-grid.admin-raw-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+@media (max-width: 820px) { .admin-performance-grid.admin-raw-grid { grid-template-columns: 1fr !important; } }
+
+
+
+/* ===== V16: Current month default + compact admin raw metrics ===== */
+.admin-v14-mini-list .admin-detail-value.compact-stat {
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -.01em !important;
+  max-width: 135px;
+  text-align: right;
+  white-space: normal;
+  word-break: break-word;
+}
+.admin-v14-mini-list > div {
+  min-height: 48px !important;
+}
+.admin-raw-title strong {
+  font-size: 13px !important;
+  max-width: 135px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-chip-cloud {
+  gap: 6px !important;
+}
+.admin-chip-cloud .admin-active-badge,
+.admin-chip-cloud span {
+  font-size: 10px !important;
+  padding: 5px 8px !important;
+}
+
+
+/* ===== V17: real-today + compact admin detail rows ===== */
+.admin-v14-mini-list > div {
+  min-height: 42px !important;
+  padding: 8px 12px !important;
+}
+.admin-v14-mini-list .compact-stat {
+  font-size: 15px !important;
+  max-width: 110px !important;
+  line-height: 1.05 !important;
+}
+.admin-raw-section {
+  padding: 10px 11px !important;
+  border-radius: 16px !important;
+}
+.admin-raw-title {
+  margin-bottom: 6px !important;
+  font-size: 10px !important;
+  gap: 7px !important;
+}
+.admin-raw-title strong {
+  font-size: 12px !important;
+  max-width: 92px !important;
+}
+.admin-chip {
+  font-size: 10px !important;
+  padding: 5px 7px !important;
+  gap: 4px !important;
+}
+.admin-chip b {
+  font-size: 11px !important;
+}
+.admin-today-date {
+  color: #7890ae;
+  font-size: 10px;
+  font-weight: 850;
+  margin: -2px 0 6px;
+}
+.admin-today-list {
+  gap: 5px !important;
+}
+.admin-today-item {
+  font-size: 11px !important;
+  padding: 4px 0;
+}
+body.dark-mode .admin-today-date { color:#9fb0c9 !important; }
+
+  </style>
 </head>
 <body>
   <div class="toast-wrap" id="toastWrap"></div>
@@ -1835,7 +1945,7 @@ body.dark-mode .admin-card-v14 .admin-v14-mini-list .rank-row .admin-detail-valu
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwPR1aan_y8lXauNlK-D53WRyGf6JmlcmnkcDlpa1Dq6ZlN9nvl5pCTJ6dhiwFGjVN2/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzH5qgklbt_A_yDGb5jwDgIr8gRC-4niK9m-TfGz_DRUyHm1-EeOSOmzgbGNMUGJoRY/exec';
     const DEFAULT_TARGET = 800;
 
     let dashboardData = null;
@@ -2287,6 +2397,11 @@ function getLeadOwnerForToday(row) {
 }
 
 function getTodayLeadCount(item, monthData) {
+  // Sheet-accurate mode: Today means the latest date found in the selected sheet/month.
+  // buildAdminPerformanceFromPancakeRows() already calculates item.today from that latest sheet date.
+  const sheetTodayValue = safeNumber(item?.today, NaN);
+  if (Number.isFinite(sheetTodayValue)) return sheetTodayValue;
+
   const adminName = normalizeNameForMatch(item?.adminName);
 
   const adminViewRows =
@@ -2361,8 +2476,9 @@ function getTodayLeadCount(item, monthData) {
         return;
       }
 
+      container.classList.add('admin-raw-grid');
       const sortBy = adminSortSelect?.value || 'leads';
-      const sortedItems = [...items].sort((a, b) => {
+      const sortedItems = [...items].filter((item) => isFocusAdminName(item.adminName)).sort((a, b) => {
         if (sortBy === 'cr') return safeNumber(b.cr) - safeNumber(a.cr) || safeNumber(b.totalLeads) - safeNumber(a.totalLeads);
         if (sortBy === 'today') return getTodayLeadCount(b, monthData) - getTodayLeadCount(a, monthData) || safeNumber(b.totalLeads) - safeNumber(a.totalLeads);
         return safeNumber(b.totalLeads) - safeNumber(a.totalLeads) || safeNumber(b.cr) - safeNumber(a.cr);
@@ -2384,13 +2500,35 @@ function getTodayLeadCount(item, monthData) {
         if (progress >= 80) statusColor = '#16a34a';
         else if (progress >= 50) statusColor = '#f59e0b';
 
-        const adminPhotos = { Aon: './aon.jpg', Namthip: './namthip.jpg', Mymint: './mymint.jpg' };
-        const photoSrc = adminPhotos[item.adminName] || '';
+        const adminPhotos = {
+  'Aon On': './aon.jpg',
+  'Aon': './aon.jpg',
+
+  'Mymint Patcha': './mymint.jpg',
+  'Mymint': './mymint.jpg',
+
+  'Thip Bejay': './namthip.jpg',
+  'Namthip': './namthip.jpg'
+};
+
+const normalizedPhotoName = normalizeAdminNameForFocus(item.adminName);
+const photoSrc = adminPhotos[item.adminName] || adminPhotos[normalizedPhotoName] || '';
         const initials = (item.adminName || '?').substring(0, 1).toUpperCase();
         const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-other';
         const rankLabel = sortBy === 'cr' ? 'CR' : (sortBy === 'today' ? 'TODAY' : 'LEADS');
         const isHotToday = today >= 10;
         const isActive = today > 0;
+        const topRecipients = item.topRecipients || topEntries(item.recipients, 4);
+        const topTodayRecipients = item.topTodayRecipients || topEntries(item.todayRecipients, 3);
+        const sourceTotal = Object.values(item.sources || {}).reduce((sum, n) => sum + safeNumber(n), 0) || totalLeads || 1;
+        const sourceRows = ['FB', 'IG', 'LINE', 'Other'].map((sourceName) => {
+          const count = safeNumber(item.sources?.[sourceName], 0);
+          const pct = Math.max((count / sourceTotal) * 100, count > 0 ? 4 : 0);
+          const cls = sourceName === 'IG' ? 'ig' : sourceName === 'LINE' ? 'line' : sourceName === 'Other' ? 'other' : 'fb';
+          return `<div class="admin-source-row ${cls}"><span>${sourceName}</span><div class="admin-source-track"><div class="admin-source-fill" style="width:${pct}%"></div></div><b>${count}</b></div>`;
+        }).join('');
+        const topRecipientHtml = topRecipients.length ? topRecipients.map(([name, count], i) => `<span class="admin-chip ${i === 0 ? 'top-recipient' : ''}">${i === 0 ? '🏆' : '👤'} ${escapeHtml(name)} <b>${safeNumber(count)}</b></span>`).join('') : '<span class="admin-chip">No recipient</span>';
+        const todayRecipientHtml = topTodayRecipients.length ? topTodayRecipients.map(([name, count]) => `<div class="admin-today-item"><span>${escapeHtml(name)}</span><b>${safeNumber(count)}</b></div>`).join('') : '<div class="admin-today-item"><span>No leads today yet</span><b>0</b></div>';
 
         const div = document.createElement('div');
         div.className = `admin-card admin-card-v14 ${rank === 1 ? 'rank-one' : ''} ${isActive ? 'active-today' : ''} ${isHotToday ? 'alert-hot' : ''}`;
@@ -2446,16 +2584,32 @@ function getTodayLeadCount(item, monthData) {
               <strong class="admin-detail-value">${consulted.toLocaleString()}</strong>
             </div>
             <div>
-              <span class="admin-detail-label">Target</span>
-              <strong class="admin-detail-value">${target.toLocaleString()}</strong>
+              <span class="admin-detail-label">Top Send To</span>
+              <strong class="admin-detail-value compact-stat">${escapeHtml(item.topRecipientName || '-')} · ${safeNumber(item.topRecipientCount)}</strong>
             </div>
             <div>
-              <span class="admin-detail-label">Remaining</span>
-              <strong class="admin-detail-value">${remaining.toLocaleString()}</strong>
+              <span class="admin-detail-label">Best Day</span>
+              <strong class="admin-detail-value compact-stat">${escapeHtml(item.bestDayLabel || '-')} · ${safeNumber(item.bestDayCount)}</strong>
             </div>
             <div class="rank-row">
               <span class="admin-detail-label">Rank by ${rankLabel}</span>
               <strong class="admin-detail-value">#${rank}</strong>
+            </div>
+          </div>
+
+          <div class="admin-raw-panel">
+            <div class="admin-raw-section">
+              <div class="admin-raw-title"><span>ส่งให้ใครมากสุด</span><strong>${escapeHtml(item.topRecipientName || '-')}</strong></div>
+              <div class="admin-chip-cloud">${topRecipientHtml}</div>
+            </div>
+            <div class="admin-raw-section">
+              <div class="admin-raw-title"><span>วันนี้ส่งให้ใคร</span><strong>${today.toLocaleString()} leads</strong></div>
+              <div class="admin-today-date">นับจากวันล่าสุดในชีท: ${escapeHtml(item.activeTodayLabel || '-')}</div>
+              <div class="admin-today-list">${todayRecipientHtml}</div>
+            </div>
+            <div class="admin-raw-section">
+              <div class="admin-raw-title"><span>ลีดมาจากไหน</span><strong>FB / IG / LINE</strong></div>
+              <div class="admin-source-bars">${sourceRows}</div>
             </div>
           </div>
         `;
@@ -2559,6 +2713,379 @@ function getTodayLeadCount(item, monthData) {
     function drawLeadChart(series){ const card=document.getElementById('leadTrendCard'); const canvas=document.getElementById('leadTrendCanvas'); if(!canvas||!card)return; const ctx=canvas.getContext('2d'); const ratio=window.devicePixelRatio||1; const rect=canvas.getBoundingClientRect(); const width=Math.max(320,Math.floor(rect.width||900)); const height=Math.max(200,Math.floor(rect.height||260)); canvas.width=width*ratio; canvas.height=height*ratio; ctx.setTransform(ratio,0,0,ratio,0,0); ctx.clearRect(0,0,width,height); if(!series.length){card.classList.add('is-empty');return;} card.classList.remove('is-empty'); const values=series.map(d=>Number(d[chartMode]||0)); const maxValue=Math.max(...values,1); const pad={left:34,right:16,top:18,bottom:34}; const plotW=width-pad.left-pad.right; const plotH=height-pad.top-pad.bottom; const step=series.length>1?plotW/(series.length-1):plotW; const getX=i=>pad.left+(series.length>1?i*step:plotW/2); const getY=v=>pad.top+plotH-(v/maxValue)*plotH; ctx.lineWidth=1; ctx.strokeStyle='rgba(125,143,170,.18)'; ctx.fillStyle='rgba(125,143,170,.75)'; ctx.font='11px Inter, system-ui, sans-serif'; for(let i=0;i<=4;i++){const y=pad.top+(plotH/4)*i; ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(width-pad.right,y);ctx.stroke(); ctx.fillText(String(Math.round(maxValue-(maxValue/4)*i)),4,y+4);} const gradient=ctx.createLinearGradient(0,pad.top,0,height-pad.bottom); gradient.addColorStop(0,chartMode==='purchased'?'rgba(22,163,74,.28)':'rgba(37,99,235,.28)'); gradient.addColorStop(1,'rgba(255,255,255,0)'); ctx.beginPath(); series.forEach((d,i)=>{const x=getX(i),y=getY(Number(d[chartMode]||0)); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);}); ctx.lineTo(getX(series.length-1),height-pad.bottom); ctx.lineTo(getX(0),height-pad.bottom); ctx.closePath(); ctx.fillStyle=gradient; ctx.fill(); ctx.beginPath(); series.forEach((d,i)=>{const x=getX(i),y=getY(Number(d[chartMode]||0)); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);}); ctx.lineWidth=3; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.strokeStyle=chartMode==='purchased'?'#16a34a':'#2563eb'; ctx.stroke(); series.forEach((d,i)=>{const x=getX(i),y=getY(Number(d[chartMode]||0)); ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=chartMode==='purchased'?'#16a34a':'#2563eb';ctx.stroke();}); ctx.fillStyle='rgba(125,143,170,.9)'; ctx.font='10px Inter, system-ui, sans-serif'; series.forEach((d,i)=>{ if(series.length>9&&i%2!==0&&i!==series.length-1)return; const label=formatShortDateLabel(d.date); const x=getX(i); ctx.save(); ctx.translate(x,height-10); ctx.rotate(series.length>10?-0.35:0); ctx.textAlign='center'; ctx.fillText(label,0,0); ctx.restore(); }); }
     function renderV17Analytics(monthData,selectedAdmin,view){ const rows=getRowsForChart(monthData,selectedAdmin,view); const series=buildDailySeries(rows); drawLeadChart(series); const best=[...series].sort((a,b)=>Number(b[chartMode]||0)-Number(a[chartMode]||0))[0]; const todayKey=new Date().toISOString().slice(0,10); const today=series.find(d=>d.date===todayKey); const bestValue=best?Number(best[chartMode]||0):0; const todayLeads=today?Number(today.leads||0):0; const bd=document.getElementById('insightBestDay'), bds=document.getElementById('insightBestDaySub'), tl=document.getElementById('insightTodayLeads'), cm=document.getElementById('insightChartMode'); if(bd)bd.textContent=best?formatShortDateLabel(best.date):'-'; if(bds)bds.textContent=best?bestValue.toLocaleString()+' '+(chartMode==='purchased'?'purchased records':'leads')+' on this day':'Waiting for data'; if(tl)tl.textContent=todayLeads.toLocaleString(); if(cm)cm.textContent=chartMode==='purchased'?'Purchased':'Leads'; }
 
+
+    /* ===== RAW GOOGLE SHEETS ADAPTER: CRM + DATA LEAD PANCAKE =====
+       ใช้เมื่อ Apps Script ส่งข้อมูลเป็นรูปแบบ { updatedAt, sheets: { ... } }
+       - Dashboard + Admin Performance ดึงจากชีท "3. data lead pancake"
+       - Recent Leads ดึงจากชีท "1. data crm" เหมือนเดิม
+    */
+    const SHEET_CRM_NAME = '1. data crm';
+    const SHEET_PANCAKE_NAME = '3. data lead pancake';
+    const FOCUS_ADMINS = ['Aon On', 'Mymint Patcha', 'Thip Bejay'];
+
+    function pickField(row, keys, fallback = '') {
+      for (const key of keys) {
+        if (row && row[key] !== undefined && row[key] !== null && String(row[key]).trim() !== '') return row[key];
+      }
+      const normalizedMap = {};
+      Object.keys(row || {}).forEach((k) => {
+        normalizedMap[String(k).trim().toLowerCase()] = row[k];
+      });
+      for (const key of keys) {
+        const value = normalizedMap[String(key).trim().toLowerCase()];
+        if (value !== undefined && value !== null && String(value).trim() !== '') return value;
+      }
+      return fallback;
+    }
+
+
+    function normalizeAdminNameForFocus(value) {
+      const name = String(value || '').trim();
+      const lower = name.toLowerCase();
+      if (lower.includes('aon')) return 'Aon On';
+      if (lower.includes('mymint') || lower.includes('my mint')) return 'Mymint Patcha';
+      if (lower.includes('thip bejay') || lower.includes('thip') || lower.includes('namthip') || lower.includes('nam tip')) return 'Thip Bejay';
+      return name || 'Unknown';
+    }
+
+    function isFocusAdminName(value) {
+      return FOCUS_ADMINS.includes(normalizeAdminNameForFocus(value));
+    }
+
+    function extractRecipientFromCard(value) {
+      const text = String(value || '').trim();
+      if (!text) return '-';
+      const match = text.match(/TH\s*AS\s*([^,|/]+)/i);
+      if (match && match[1]) return match[1].trim();
+      const parts = text.split(',').map((p) => p.trim()).filter(Boolean);
+      return parts[parts.length - 1] || text;
+    }
+
+    function detectLeadSource(row, fallback = '') {
+      const text = [
+        fallback,
+        row?.source,
+        row?.card,
+        row?.note,
+        row?.raw?.['Nguồn đơn hàng'],
+        row?.raw?.['Nguồn đơn hàng 1'],
+        row?.raw?.['Nguồn đơn hàng 2'],
+        row?.raw?.['Quảng cáo'],
+        row?.raw?.['Facebook Page'],
+        row?.raw?.['Face book Page']
+      ].map((v) => String(v || '').toLowerCase()).join(' ');
+      if (text.includes('line')) return 'LINE';
+      if (text.includes('instagram') || text.includes('instagr') || text.includes('ig')) return 'IG';
+      if (text.includes('facebook') || text.includes('fb')) return 'FB';
+      return 'Other';
+    }
+
+    function topEntries(objectMap, limit = 3) {
+      return Object.entries(objectMap || {})
+        .filter(([name]) => name && name !== '-')
+        .sort((a, b) => Number(b[1] || 0) - Number(a[1] || 0) || String(a[0]).localeCompare(String(b[0])))
+        .slice(0, limit);
+    }
+
+    function normalizePhoneValue(value) {
+      let phone = String(value || '').replace(/\D/g, '').trim();
+      if (phone.startsWith('66')) phone = '0' + phone.slice(2);
+      return phone;
+    }
+
+    function parseSheetDate(value) {
+      if (!value) return null;
+      const text = String(value).trim();
+      const dmy = text.match(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
+      if (dmy) {
+        const [, d, m, y] = dmy;
+        const date = new Date(Number(y), Number(m) - 1, Number(d));
+        return Number.isNaN(date.getTime()) ? null : date;
+      }
+      const ymd = text.match(/(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
+      if (ymd) {
+        const [, y, m, d] = ymd;
+        const date = new Date(Number(y), Number(m) - 1, Number(d));
+        return Number.isNaN(date.getTime()) ? null : date;
+      }
+      const date = new Date(text);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function toDateKey(date) {
+      if (!date) return 'no-date';
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+
+    function toMonthKey(date) {
+      if (!date) return 'Unknown';
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    }
+
+    function toMonthLabel(monthKey) {
+      const [y, m] = String(monthKey).split('-').map(Number);
+      if (!y || !m) return String(monthKey || 'Unknown');
+      return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(y, m - 1, 1));
+    }
+
+
+    function compactDateLabel(dateKey) {
+      if (!dateKey || dateKey === 'no-date' || dateKey === '-') return '-';
+      const [y, m, d] = String(dateKey).split('-').map(Number);
+      if (!y || !m || !d) return String(dateKey);
+      return new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' }).format(new Date(y, m - 1, d));
+    }
+
+    function getPreferredMonthKey(months) {
+      const keys = Object.keys(months || {});
+      if (!keys.length) return '';
+      const now = new Date();
+      const currentKey = toMonthKey(now);
+      if (months[currentKey]) return currentKey;
+      return keys.sort().reverse()[0];
+    }
+
+    function getActiveTodayKeyForRows(rows) {
+      // Sheet-accurate mode: use the latest date that exists in the selected sheet/month.
+      // This makes the dashboard match Google Sheets 100% even when the sheet is not realtime.
+      const keys = (rows || [])
+        .map((row) => row?.dateKey || toDateKey(parseSheetDate(row?.dateLabel || row?.date)))
+        .filter((key) => key && key !== 'no-date')
+        .sort();
+      return keys.length ? keys[keys.length - 1] : getBangkokTodayKey();
+    }
+
+    function normalizePancakeLead(row, index = 0) {
+      const phone = normalizePhoneValue(pickField(row, ['SĐT', 'SDT', 'เบอร์', 'Phone', 'phone', 'เบอร์โทร']));
+      const dateText = pickField(row, ['Ngày tạo đơn', 'วันที่สร้างออเดอร์', 'Thời điểm tạo đơn', 'Oppo date', 'Oppodate', 'Date', 'date']);
+      const date = parseSheetDate(dateText);
+      const adminRaw = String(pickField(row, ['Người xử lý', 'ผู้ดูแล', 'Admin', 'admin', 'คนดูแล'], 'Unknown')).trim() || 'Unknown';
+      const admin = normalizeAdminNameForFocus(adminRaw);
+      const status = String(pickField(row, ['Người đơn hàng', 'สถานะ', 'Status', 'status'], 'Active')).trim() || 'Active';
+      const link = pickField(row, ['Ghi chú nổi bật', 'Link', 'link', 'Note', 'note']);
+      const sourceRaw = pickField(row, ['Nguồn đơn hàng', 'Nguồn đơn hàng 1', 'Nguồn đơn hàng 2', 'Nguồn', 'แหล่งที่มา', 'Source', 'source']);
+      const card = pickField(row, ['Thẻ', 'Tag', 'tag']);
+      const recipient = extractRecipientFromCard(card);
+      const sourceType = detectLeadSource({ raw: row, card, note: link }, sourceRaw);
+
+      return {
+        no: pickField(row, ['SĐT', 'SDT', 'No', 'no'], index + 1),
+        date: date ? toDateKey(date) : '',
+        dateKey: date ? toDateKey(date) : '',
+        dateLabel: dateText || '',
+        phone,
+        name: card || '-',
+        inboxName: card || '-',
+        owner: admin,
+        addedBy: admin,
+        adminTab: admin,
+        status,
+        source: safeUrl(link) || safeUrl(sourceRaw),
+        sourceText: sourceRaw || sourceType,
+        sourceType,
+        recipient,
+        card,
+        note: pickField(row, ['Quảng cáo', 'โฆษณา', 'AD ID final', 'AD ID', 'Oppo ID', 'note'], ''),
+        raw: row
+      };
+    }
+
+    function normalizeCrmLead(row, index = 0) {
+      const phone = normalizePhoneValue(pickField(row, ['SĐT', 'SDT', 'Phone', 'phone', 'เบอร์', 'เบอร์โทร', 'Column_5']));
+      const dateText = pickField(row, ['Date', 'date', 'วันที่', 'Created At', 'Ngày tạo đơn', 'Column_1']);
+      const date = parseSheetDate(dateText);
+      const status = pickField(row, ['Status', 'status', 'สถานะ', 'Column_20'], 'No Status');
+      const owner = pickField(row, ['Owner', 'owner', 'ผู้ดูแล', 'Admin', 'admin'], 'New');
+
+      return {
+        no: pickField(row, ['No', 'no', 'ลำดับ', 'Column_1'], index + 1),
+        date: date ? toDateKey(date) : '',
+        dateKey: date ? toDateKey(date) : '',
+        dateLabel: dateText || '',
+        phone,
+        name: pickField(row, ['Name', 'name', 'ชื่อลูกค้า', 'Customer Name'], '-'),
+        inboxName: pickField(row, ['Inbox Name', 'inboxName', 'ชื่อลูกค้า'], '-'),
+        owner,
+        addedBy: pickField(row, ['Added By', 'addedBy', 'Admin', 'admin'], owner),
+        adminTab: pickField(row, ['Admin Tab', 'adminTab'], owner),
+        status,
+        source: safeUrl(pickField(row, ['Link', 'link', 'Source', 'source', 'Ghi chú nổi bật'], '')),
+        note: pickField(row, ['Note', 'note', 'หมายเหตุ'], ''),
+        raw: row
+      };
+    }
+
+    function isClosedLeadStatus(status) {
+      const s = String(status || '').toLowerCase();
+      return s.includes('l6 purchased') || s.includes('purchased') || s.includes('closed') || s.includes('consulted') || s.includes('ซื้อ') || s.includes('ปิด');
+    }
+
+    function buildAdminPerformanceFromPancakeRows(rows, targetConfig = {}) {
+      const map = new Map();
+      const focusRows = (rows || []).filter((row) => isFocusAdminName(row.owner || row.addedBy));
+      const activeTodayKey = getActiveTodayKeyForRows(focusRows);
+
+      FOCUS_ADMINS.forEach((admin) => {
+        map.set(admin, {
+          adminName: admin,
+          totalLeads: 0,
+          sentToSales: 0,
+          purchased: 0,
+          consulted: 0,
+          closed: 0,
+          today: 0,
+          target: safeNumber(targetConfig?.[admin], 0),
+          remaining: 0,
+          dailyMap: {},
+          recipients: {},
+          todayRecipients: {},
+          sources: { FB: 0, IG: 0, LINE: 0, Other: 0 },
+          rows: []
+        });
+      });
+
+      focusRows.forEach((row) => {
+        const admin = normalizeAdminNameForFocus(row.owner || row.addedBy);
+        if (!map.has(admin)) return;
+        const item = map.get(admin);
+        const dayKey = row.dateKey || toDateKey(parseSheetDate(row.dateLabel || row.date));
+        const recipient = row.recipient || extractRecipientFromCard(row.card || row.name || row.inboxName);
+        const sourceType = detectLeadSource(row, row.sourceType || row.sourceText || 'Other');
+
+        item.totalLeads += 1;
+        item.sentToSales += 1;
+        item.rows.push(row);
+        item.dailyMap[dayKey] = (item.dailyMap[dayKey] || 0) + 1;
+        item.recipients[recipient] = (item.recipients[recipient] || 0) + 1;
+        item.sources[sourceType] = (item.sources[sourceType] || 0) + 1;
+
+        if (dayKey === activeTodayKey) {
+          item.today += 1;
+          item.todayRecipients[recipient] = (item.todayRecipients[recipient] || 0) + 1;
+        }
+        if (isClosedLeadStatus(row.status)) {
+          item.purchased += 1;
+          item.consulted += 1;
+          item.closed += 1;
+        }
+      });
+
+      return Array.from(map.values()).map((item) => {
+        const best = Object.entries(item.dailyMap).sort((a, b) => b[1] - a[1])[0];
+        const topRecipient = topEntries(item.recipients, 1)[0] || ['-', 0];
+        const topTodayRecipient = topEntries(item.todayRecipients, 1)[0] || ['-', 0];
+        const cr = item.totalLeads > 0 ? Math.round((item.closed / item.totalLeads) * 100) : 0;
+        return {
+          ...item,
+          cr,
+          remaining: Math.max(safeNumber(item.target) - safeNumber(item.totalLeads), 0),
+          bestDayLabel: best ? compactDateLabel(best[0]) : '-',
+          bestDayCount: best ? best[1] : 0,
+          activeTodayKey,
+          activeTodayLabel: compactDateLabel(activeTodayKey),
+          todayModeLabel: 'Latest sheet date',
+          topRecipientName: topRecipient[0],
+          topRecipientCount: topRecipient[1],
+          topTodayRecipientName: topTodayRecipient[0],
+          topTodayRecipientCount: topTodayRecipient[1],
+          topRecipients: topEntries(item.recipients, 4),
+          topTodayRecipients: topEntries(item.todayRecipients, 3)
+        };
+      }).sort((a, b) => FOCUS_ADMINS.indexOf(a.adminName) - FOCUS_ADMINS.indexOf(b.adminName));
+    }
+
+    function buildStatuses(rows) {
+      const statuses = {};
+      rows.forEach((row) => {
+        const status = row.status || 'Active';
+        statuses[status] = (statuses[status] || 0) + 1;
+      });
+      return statuses;
+    }
+
+    function buildSummary(rows, target = DEFAULT_TARGET) {
+      const collected = rows.length;
+      const closed = rows.filter((r) => isClosedLeadStatus(r.status)).length;
+      return {
+        collected,
+        remaining: Math.max(target - collected, 0),
+        conversionRate: collected > 0 ? Math.round((closed / collected) * 100) : 0,
+        activeLeads: collected,
+        messengerTarget: 0,
+        targetCr: 0,
+        workingDay: 0,
+        selectedTarget: target
+      };
+    }
+
+    function buildView(rows, target = DEFAULT_TARGET) {
+      const recentLeads = [...rows].sort((a, b) => {
+        const da = parseSheetDate(a.dateLabel || a.date)?.getTime() || 0;
+        const db = parseSheetDate(b.dateLabel || b.date)?.getTime() || 0;
+        return db - da;
+      }).slice(0, 80);
+      return {
+        summary: buildSummary(rows, target),
+        statuses: buildStatuses(rows),
+        recentLeads
+      };
+    }
+
+    function normalizeDashboardPayload(payload) {
+      if (payload && payload.months) return payload;
+      const sheets = payload?.sheets || {};
+      const pancakeRaw = Array.isArray(sheets[SHEET_PANCAKE_NAME]) ? sheets[SHEET_PANCAKE_NAME] : [];
+      const crmRaw = Array.isArray(sheets[SHEET_CRM_NAME]) ? sheets[SHEET_CRM_NAME] : [];
+      const pancakeRows = pancakeRaw.map(normalizePancakeLead).filter((r) => r.owner && r.owner !== 'Unknown');
+      const crmRows = crmRaw.map(normalizeCrmLead);
+      const recentRowsSource = crmRows.length ? crmRows : pancakeRows;
+      const monthsMap = new Map();
+
+      pancakeRows.forEach((row) => {
+        const date = parseSheetDate(row.dateLabel || row.date);
+        const key = toMonthKey(date);
+        if (!monthsMap.has(key)) monthsMap.set(key, []);
+        monthsMap.get(key).push(row);
+      });
+      if (!monthsMap.size) monthsMap.set(toMonthKey(new Date()), []);
+
+      const months = {};
+      Array.from(monthsMap.entries()).forEach(([monthKey, rows]) => {
+        const admins = [...new Set(rows.map((r) => r.owner).filter(Boolean))].sort();
+        const views = { All: buildView(rows, DEFAULT_TARGET) };
+        admins.forEach((admin) => {
+          views[admin] = buildView(rows.filter((r) => r.owner === admin), DEFAULT_TARGET);
+        });
+
+        const recentForMonth = recentRowsSource.filter((r) => {
+          const d = parseSheetDate(r.dateLabel || r.date);
+          return toMonthKey(d) === monthKey;
+        });
+        if (recentForMonth.length) views.All.recentLeads = buildView(recentForMonth, DEFAULT_TARGET).recentLeads;
+
+        months[monthKey] = {
+          key: monthKey,
+          label: toMonthLabel(monthKey),
+          targetConfig: { All: DEFAULT_TARGET },
+          adminPerformance: buildAdminPerformanceFromPancakeRows(rows),
+          views,
+          allLeads: rows,
+          leads: rows,
+          rows
+        };
+      });
+
+      const monthOrder = Object.keys(months).sort().reverse();
+      const admins = ['All', ...FOCUS_ADMINS];
+
+      return {
+        lastUpdated: payload?.updatedAt || new Date().toISOString(),
+        monthOrder,
+        months,
+        admins
+      };
+    }
+
 function renderRecentLeads(rows) {
   const tbody = document.getElementById('recentLeadsBody');
   tbody.innerHTML = '';
@@ -2648,15 +3175,17 @@ function renderRecentLeads(rows) {
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        const newData = await res.json();
+        let newData = await res.json();
+        newData = normalizeDashboardPayload(newData);
         if (!newData || typeof newData !== 'object' || !newData.months) throw new Error('Invalid dashboard data');
 
         checkNewLeadNotification(newData);
         dashboardData = newData;
 
+        const preferredMonth = getPreferredMonthKey(dashboardData.months || {});
         const currentMonth = monthSelect.value && dashboardData.months[monthSelect.value]
           ? monthSelect.value
-          : (Array.isArray(dashboardData.monthOrder) ? dashboardData.monthOrder[0] : Object.keys(dashboardData.months || {})[0]);
+          : preferredMonth;
         const currentAdmin = adminSelect.value || 'All';
 
         const monthList = Array.isArray(dashboardData.monthOrder)
