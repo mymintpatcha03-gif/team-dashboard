@@ -1676,7 +1676,24 @@ body.dark-mode .admin-source-track { background: rgba(148,163,184,.18) !importan
 }
 body.dark-mode .admin-today-date { color:#9fb0c9 !important; }
 
-  </style>
+  
+
+/* ===== Final cleanup: only real sheet KPIs ===== */
+.grid-kpi {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  margin-bottom: 14px !important;
+}
+.content-grid {
+  margin-top: 0 !important;
+}
+@media (max-width: 1320px) {
+  .grid-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 720px) {
+  .grid-kpi { grid-template-columns: 1fr !important; }
+}
+
+</style>
 </head>
 <body>
   <div class="toast-wrap" id="toastWrap"></div>
@@ -1823,65 +1840,6 @@ body.dark-mode .admin-today-date { color:#9fb0c9 !important; }
             </div>
           </div>
 
-          <div class="card kpi-card kpi-blue">
-            <div class="kpi-inner">
-              <div class="kpi-head">
-                <div>
-                  <div class="kpi-label">Messenger Target</div>
-                  <div class="kpi-value" id="kpiMessengerTarget">0</div>
-                </div>
-                <div class="kpi-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
-                </div>
-              </div>
-              <div class="kpi-sub">Total target from Summary</div>
-            </div>
-          </div>
-
-          <div class="card kpi-card kpi-orange">
-            <div class="kpi-inner">
-              <div class="kpi-head">
-                <div>
-                  <div class="kpi-label">Target CR</div>
-                  <div class="kpi-value" id="kpiTargetCr">0%</div>
-                </div>
-                <div class="kpi-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"></path><path d="M3 12h18"></path><path d="M5.6 5.6 18.4 18.4"></path></svg>
-                </div>
-              </div>
-              <div class="kpi-sub">Monthly CR target</div>
-            </div>
-          </div>
-
-          <div class="card kpi-card kpi-purple">
-            <div class="kpi-inner">
-              <div class="kpi-head">
-                <div>
-                  <div class="kpi-label">Working Day</div>
-                  <div class="kpi-value" id="kpiWorkingDay">0</div>
-                </div>
-                <div class="kpi-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg>
-                </div>
-              </div>
-              <div class="kpi-sub">Working days for selected admin</div>
-            </div>
-          </div>
-
-          <div class="card kpi-card kpi-green">
-            <div class="kpi-inner">
-              <div class="kpi-head">
-                <div>
-                  <div class="kpi-label">Selected Target</div>
-                  <div class="kpi-value" id="kpiSelectedTarget">0</div>
-                </div>
-                <div class="kpi-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M2 12h4"></path><path d="M18 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path><circle cx="12" cy="12" r="4"></circle></svg>
-                </div>
-              </div>
-              <div class="kpi-sub">Target for selected team/admin</div>
-            </div>
-          </div>
         </section>
 
         <section class="content-grid">
@@ -2274,16 +2232,12 @@ body.dark-mode .admin-today-date { color:#9fb0c9 !important; }
       document.getElementById('kpiRemaining').textContent = remaining.toLocaleString();
       document.getElementById('kpiCr').textContent = `${currentCr}%`;
       document.getElementById('kpiActive').textContent = (viewSummary?.activeLeads || 0).toLocaleString();
-      document.getElementById('kpiMessengerTarget').textContent = messengerTarget.toLocaleString();
-      document.getElementById('kpiTargetCr').textContent = `${targetCr}%`;
-      document.getElementById('kpiWorkingDay').textContent = workingDay.toLocaleString();
-      document.getElementById('kpiSelectedTarget').textContent = selectedTarget.toLocaleString();
-      document.getElementById('kpiCrSub').textContent = `Target CR ${targetCr}%`;
+      document.getElementById('kpiCrSub').textContent = 'Purchased / Total Leads';
       document.getElementById('progressBar').style.width = `${progress}%`;
 
       setKpiTrend('kpiCollected', `↑ +${todayTotal.toLocaleString()} today`, todayTotal > 0 ? 'up' : 'neutral');
       setKpiTrend('kpiRemaining', todayTotal > 0 ? `↓ -${todayTotal.toLocaleString()} from today` : 'No leads today yet', todayTotal > 0 ? 'down' : 'neutral');
-      setKpiTrend('kpiCr', currentCr >= targetCr ? 'Above CR target' : `Below target by ${Math.max(targetCr - currentCr, 0).toFixed(1)}%`, currentCr >= targetCr ? 'up' : 'down');
+      setKpiTrend('kpiCr', 'Purchased / Total Leads', currentCr > 0 ? 'up' : 'neutral');
       setKpiTrend('kpiActive', `Active +${todayTotal.toLocaleString()} today`, todayTotal > 0 ? 'up' : 'neutral');
     }
 
@@ -2599,16 +2553,16 @@ const photoSrc = adminPhotos[item.adminName] || adminPhotos[normalizedPhotoName]
 
           <div class="admin-raw-panel">
             <div class="admin-raw-section">
-              <div class="admin-raw-title"><span>ส่งให้ใครมากสุด</span><strong>${escapeHtml(item.topRecipientName || '-')}</strong></div>
+              <div class="admin-raw-title"><span>Top Recipients</span><strong>${escapeHtml(item.topRecipientName || '-')}</strong></div>
               <div class="admin-chip-cloud">${topRecipientHtml}</div>
             </div>
             <div class="admin-raw-section">
-              <div class="admin-raw-title"><span>วันนี้ส่งให้ใคร</span><strong>${today.toLocaleString()} leads</strong></div>
-              <div class="admin-today-date">นับจากวันล่าสุดในชีท: ${escapeHtml(item.activeTodayLabel || '-')}</div>
+              <div class="admin-raw-title"><span>Latest Sheet Day Recipients</span><strong>${today.toLocaleString()} leads</strong></div>
+              <div class="admin-today-date">Based on latest sheet date: ${escapeHtml(item.activeTodayLabel || '-')}</div>
               <div class="admin-today-list">${todayRecipientHtml}</div>
             </div>
             <div class="admin-raw-section">
-              <div class="admin-raw-title"><span>ลีดมาจากไหน</span><strong>FB / IG / LINE</strong></div>
+              <div class="admin-raw-title"><span>Lead Sources</span><strong>FB / IG / LINE</strong></div>
               <div class="admin-source-bars">${sourceRows}</div>
             </div>
           </div>
@@ -2796,18 +2750,54 @@ const photoSrc = adminPhotos[item.adminName] || adminPhotos[normalizedPhotoName]
     function parseSheetDate(value) {
       if (!value) return null;
       const text = String(value).trim();
-      const dmy = text.match(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
-      if (dmy) {
-        const [, d, m, y] = dmy;
-        const date = new Date(Number(y), Number(m) - 1, Number(d));
-        return Number.isNaN(date.getTime()) ? null : date;
-      }
+
+      // ISO / CRM format: 2026-05-01 or 2026/05/01 anywhere in the text
       const ymd = text.match(/(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
       if (ymd) {
         const [, y, m, d] = ymd;
         const date = new Date(Number(y), Number(m) - 1, Number(d));
         return Number.isNaN(date.getTime()) ? null : date;
       }
+
+      // Pancake has mixed display formats:
+      // - Oppo date: 01-05-2026 = 1 May 2026 (DD-MM-YYYY)
+      // - Thời điểm tạo đơn: 20:44 01/05/2026 = 1 May 2026 (DD/MM/YYYY)
+      // - Ngày tạo đơn sometimes displays as 05/01/2026 = May 1 2026 (MM/DD/YYYY)
+      const dmy = text.match(/(\d{1,2})([\/-])(\d{1,2})\2(\d{4})/);
+      if (dmy) {
+        let a = Number(dmy[1]);
+        const sep = dmy[2];
+        let b = Number(dmy[3]);
+        const y = Number(dmy[4]);
+
+        let day;
+        let month;
+
+        if (sep === '-') {
+          // Oppo date uses DD-MM-YYYY
+          day = a;
+          month = b;
+        } else if (/\d{1,2}:\d{2}/.test(text)) {
+          // Timestamp text uses DD/MM/YYYY after the time
+          day = a;
+          month = b;
+        } else if (a > 12 && b <= 12) {
+          day = a;
+          month = b;
+        } else if (b > 12 && a <= 12) {
+          // clear MM/DD/YYYY
+          day = b;
+          month = a;
+        } else {
+          // ambiguous slash date from Google display, e.g. 05/01/2026 = May 1
+          month = a;
+          day = b;
+        }
+
+        const date = new Date(y, month - 1, day);
+        return Number.isNaN(date.getTime()) ? null : date;
+      }
+
       const date = new Date(text);
       return Number.isNaN(date.getTime()) ? null : date;
     }
@@ -2857,13 +2847,17 @@ const photoSrc = adminPhotos[item.adminName] || adminPhotos[normalizedPhotoName]
 
     function normalizePancakeLead(row, index = 0) {
       const phone = normalizePhoneValue(pickField(row, ['SĐT', 'SDT', 'เบอร์', 'Phone', 'phone', 'เบอร์โทร']));
-      const dateText = pickField(row, ['Ngày tạo đơn', 'วันที่สร้างออเดอร์', 'Thời điểm tạo đơn', 'Oppo date', 'Oppodate', 'Date', 'date']);
+
+      // IMPORTANT: use Pancake's Oppo date / timestamp first.
+      // Column B can display 05/01/2026, which is ambiguous. Oppo date is stable as 01-05-2026.
+      const dateText = pickField(row, ['Oppo date', 'Oppodate', 'Thời điểm tạo đơn', 'Ngày tạo đơn', 'วันที่สร้างออเดอร์', 'Date', 'date']);
       const date = parseSheetDate(dateText);
+
       const adminRaw = String(pickField(row, ['Người xử lý', 'ผู้ดูแล', 'Admin', 'admin', 'คนดูแล'], 'Unknown')).trim() || 'Unknown';
       const admin = normalizeAdminNameForFocus(adminRaw);
       const status = String(pickField(row, ['Người đơn hàng', 'สถานะ', 'Status', 'status'], 'Active')).trim() || 'Active';
       const link = pickField(row, ['Ghi chú nổi bật', 'Link', 'link', 'Note', 'note']);
-      const sourceRaw = pickField(row, ['Nguồn đơn hàng', 'Nguồn đơn hàng 1', 'Nguồn đơn hàng 2', 'Nguồn', 'แหล่งที่มา', 'Source', 'source']);
+      const sourceRaw = pickField(row, ['Nguồn đơn hàng', 'Nguồn đơn hàng (tên)', 'Nguồn đơn hàng 1', 'Nguồn đơn hàng 2', 'Nguồn', 'แหล่งที่มา', 'Source', 'source']);
       const card = pickField(row, ['Thẻ', 'Tag', 'tag']);
       const recipient = extractRecipientFromCard(card);
       const sourceType = detectLeadSource({ raw: row, card, note: link }, sourceRaw);
@@ -3153,7 +3147,7 @@ function renderRecentLeads(rows) {
       const force = !!options.force;
       if (isLoading && !force) return;
       if (force) isLoading = false;
-      if (!API_URL || API_URL.includes('ใส่ URL') || API_URL.includes('PASTE')) {
+      if (!API_URL || API_URL.includes('PASTE_URL_HERE') || API_URL.includes('PASTE')) {
         showToast('API URL Missing', 'Please add the Apps Script Web App URL to API_URL first.');
         return;
       }
