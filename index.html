@@ -5663,14 +5663,42 @@ body, button, select, input, textarea {
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzH5qgklbt_A_yDGb5jwDgIr8gRC-4niK9m-TfGz_DRUyHm1-EeOSOmzgbGNMUGJoRY/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzXbsFXqGaSt-aXkmTor1M1QiXQKzJqIJxtCtLtUYWAD1nyxoNj-I-A5e9IOGonY1rq/exec';    // เปิดเว็บมาให้เข้าเดือนมิถุนายน 2026 ทันที
+    const DEFAULT_MONTH_KEY = '2026-06';
+
+    // ใส่ Spreadsheet ID ของแต่ละเดือนตรงนี้
+    // ตอนนี้ใส่เดือน June ให้แล้ว ถ้าต้องการ April/May ให้กลับมา ต้องใส่ ID ของไฟล์ 2604/2605 เพิ่ม
+const MONTH_SHEET_IDS = {
+  '2026-06': '1-S2FIpQ6xBkw5-fINLhbpm50dWVvuk8fyJ0g9KsU-9Y'
+};
+
     const DEFAULT_TARGET = 800;
-    const MONTH_LEAD_TARGETS = { '2026-05': 1800, default: DEFAULT_TARGET };
-    const OVERVIEW_GOALS = { daily: 400, cr: 18, inboxMonthly: 1800 };
-    const MONTH_OVERVIEW_GOALS = {
-      '2026-04': { label1: 'Messenger Target', value1: 4000, label2: 'CR %', value2: '20%', label3: 'Number of Leads', value3: 800 },
-      default: { label1: 'Daily', value1: OVERVIEW_GOALS.daily, label2: 'CR', value2: `${OVERVIEW_GOALS.cr}%`, label3: 'Inbox / Month', value3: OVERVIEW_GOALS.inboxMonthly }
+    const MONTH_LEAD_TARGETS = {
+      '2026-06': 1400,
+      '2026-05': 1800,
+      '2026-04': 800,
+      default: DEFAULT_TARGET
     };
+
+    const OVERVIEW_GOALS = { daily: 400, cr: 18, inboxMonthly: 1800 };
+  const MONTH_OVERVIEW_GOALS = {
+  '2026-06': {
+    label1: 'DAILY',
+    value1: 46,
+    label2: 'CR',
+    value2: '15%',
+    label3: 'INBOX / MONTH',
+    value3: 1400
+  },
+  default: {
+    label1: 'DAILY',
+    value1: 400,
+    label2: 'CR',
+    value2: '18%',
+    label3: 'INBOX / MONTH',
+    value3: 1800
+  }
+};
 
     function getMonthLeadTarget(monthKey) {
       return MONTH_LEAD_TARGETS[monthKey] ?? MONTH_LEAD_TARGETS.default;
@@ -6121,8 +6149,10 @@ body, button, select, input, textarea {
 
       setKpiTrend('kpiCollected', `↑ +${todayTotal.toLocaleString()} today`, todayTotal > 0 ? 'up' : 'neutral');
       setKpiTrend('kpiRemaining', todayTotal > 0 ? `↓ -${todayTotal.toLocaleString()} from today` : 'No leads today yet', todayTotal > 0 ? 'down' : 'neutral');
-      setKpiTrend('kpiCr', currentCr >= OVERVIEW_GOALS.cr ? `Above target ${OVERVIEW_GOALS.cr}%` : `Goal ${OVERVIEW_GOALS.cr}%`, currentCr >= OVERVIEW_GOALS.cr ? 'up' : 'neutral');
-      setKpiTrend('kpiOverviewValue', `Inbox goal ${OVERVIEW_GOALS.inboxMonthly.toLocaleString()} / month`, 'neutral');
+      const monthCrGoal = parseInt(String(monthGoalConfig.value2).replace(/[^0-9]/g, ''), 10) || OVERVIEW_GOALS.cr;
+      const monthInboxGoal = safeNumber(monthGoalConfig.value3, OVERVIEW_GOALS.inboxMonthly);
+      setKpiTrend('kpiCr', currentCr >= monthCrGoal ? `Above target ${monthCrGoal}%` : `Goal ${monthCrGoal}%`, currentCr >= monthCrGoal ? 'up' : 'neutral');
+      setKpiTrend('kpiOverviewValue', `Inbox goal ${monthInboxGoal.toLocaleString()} / month`, 'neutral');
 
       renderLeadSourceDropdown(rows);
     }
@@ -6134,7 +6164,11 @@ body, button, select, input, textarea {
 
 const PROFILE_PHOTOS = {
   'aon': './aon.jpg',
+  'aon on': './aon.jpg',
+
   'bay': './bayjpg.jpg',
+  'bayjpg': './bayjpg.jpg',
+
   'cheetah': './Cheetah.jpg',
   'earn': './Earn.jpg',
   'few': './Few.jpg',
@@ -6142,10 +6176,14 @@ const PROFILE_PHOTOS = {
   'kae': './Kae.jpg',
   'lock': './Lock.jpg',
   'mint': './Mint.jpg',
-  'mymint patcha': './mymint.jpg',
+
   'mymint': './mymint.jpg',
-  'thip bejay': './namthip.jpg',
+  'mymint patcha': './mymint.jpg',
+  'mymint patcha': './mymint.jpg',
+
   'namthip': './namthip.jpg',
+  'thip': './namthip.jpg',
+  'thip bejay': './namthip.jpg',
 
   'namwhan': './Namwhan.jpg',
   'nam whan': './Namwhan.jpg',
@@ -6154,6 +6192,7 @@ const PROFILE_PHOTOS = {
 
   'new': './New.jpg',
   'nut': './Nut4.jpg',
+  'nut4': './Nut4.jpg',
   'peak': './peak.jpg',
   'palm': './Palm.jpg',
   'pop': './pop.jpg',
@@ -7102,6 +7141,7 @@ function getTodayLeadCount(item, monthData) {
       if (!keys.length) return '';
       const now = new Date();
       const currentKey = toMonthKey(now);
+      if (months[DEFAULT_MONTH_KEY]) return DEFAULT_MONTH_KEY;
       if (months[currentKey]) return currentKey;
       return keys.sort().reverse()[0];
     }
@@ -7308,7 +7348,9 @@ function getTodayLeadCount(item, monthData) {
       const sheets = payload?.sheets || {};
       const pancakeRaw = Array.isArray(sheets[SHEET_PANCAKE_NAME]) ? sheets[SHEET_PANCAKE_NAME] : [];
       const crmRaw = Array.isArray(sheets[SHEET_CRM_NAME]) ? sheets[SHEET_CRM_NAME] : [];
-      const pancakeRows = pancakeRaw.map(normalizePancakeLead).filter((r) => r.owner && r.owner !== 'Unknown');
+      const pancakeRows = pancakeRaw
+        .map(normalizePancakeLead)
+        .filter((r) => isFocusAdminName(r.owner || r.addedBy));
       const crmRows = crmRaw.map(normalizeCrmLead);
       const recentRowsSource = crmRows.length ? crmRows : pancakeRows;
       const monthsMap = new Map();
@@ -7424,6 +7466,72 @@ function renderRecentLeads(rows) {
       renderRecentLeads(view.recentLeads || []);
     }
 
+  function buildApiUrl(sheetId, callbackName) {
+    const params = new URLSearchParams();
+
+    if (sheetId) {
+      params.set('sheetId', sheetId);
+    }
+
+    params.set('callback', callbackName);
+
+    return API_URL + '?' + params.toString();
+  }
+
+  function fetchDashboardJson(sheetId) {
+    return new Promise((resolve, reject) => {
+      const callbackName = `jsonpCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const finalUrl = buildApiUrl(sheetId, callbackName);
+      const script = document.createElement('script');
+
+      const cleanup = () => {
+        try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+        if (script.parentNode) script.parentNode.removeChild(script);
+      };
+
+      const timeout = setTimeout(() => {
+        cleanup();
+        reject(new Error('JSONP timeout'));
+      }, 45000);
+
+      window[callbackName] = (data) => {
+        clearTimeout(timeout);
+        cleanup();
+        resolve(data);
+      };
+
+      script.onerror = () => {
+        clearTimeout(timeout);
+        cleanup();
+        reject(new Error('JSONP load failed'));
+      };
+
+      script.src = finalUrl;
+      document.body.appendChild(script);
+    });
+  }
+
+    function mergeDashboardDataPayloads(payloads) {
+      const merged = {
+        lastUpdated: new Date().toISOString(),
+        monthOrder: [],
+        months: {},
+        admins: ['All', ...FOCUS_ADMINS]
+      };
+
+      payloads.forEach((payload) => {
+        const normalized = normalizeDashboardPayload(payload);
+        if (!normalized || !normalized.months) return;
+        merged.lastUpdated = normalized.lastUpdated || merged.lastUpdated;
+        Object.keys(normalized.months).forEach((monthKey) => {
+          merged.months[monthKey] = normalized.months[monthKey];
+        });
+      });
+
+      merged.monthOrder = Object.keys(merged.months).sort().reverse();
+      return merged;
+    }
+
     async function loadDashboardData(options = {}) {
       const silent = !!options.silent;
       const force = !!options.force;
@@ -7445,14 +7553,15 @@ function renderRecentLeads(rows) {
       const timeoutId = setTimeout(() => controller.abort(), 12000);
 
       try {
-        const res = await fetch(`${API_URL}${API_URL.includes('?') ? '&' : '?'}_=${Date.now()}`, {
-          cache: 'no-store',
-          signal: controller.signal
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const sheetIds = Object.values(MONTH_SHEET_IDS || {}).filter(Boolean);
+        const payloads = [];
 
-        let newData = await res.json();
-        newData = normalizeDashboardPayload(newData);
+        for (const sheetId of sheetIds) {
+          // ใช้ JSONP เพื่อกันปัญหา CORS/โหลดจาก local file แล้ว fetch ไม่ผ่าน
+          payloads.push(await fetchDashboardJson(sheetId));
+        }
+
+        let newData = mergeDashboardDataPayloads(payloads);
         if (!newData || typeof newData !== 'object' || !newData.months) throw new Error('Invalid dashboard data');
 
         checkNewLeadNotification(newData);
