@@ -14,7 +14,7 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <title>Admin Dashboard</title>
+  <title>Admin Dashboard - July Ready V3</title>
   <style>
     :root {
       --bg: #eef3fb;
@@ -5444,22 +5444,22 @@ body, button, select, input, textarea {
       <div class="page-shell">
         <div class="topbar">
           <div class="headline">
-            <h2 id="pageTitle">Monthly Lead Dashboard</h2>
+            <h2 id="pageTitle">Monthly Lead Dashboard · July 2026 · All Team</h2>
             <div class="headline-meta" id="lastUpdatedText">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 3v6h6"></path></svg>
-              <span>Loading latest data...</span>
+              <span>July 2026 ready. Waiting for Google Sheets data...</span>
             </div>
           </div>
 
      <div class="controls">
   <div class="control-box">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg>
-    <select id="monthSelect"></select>
+    <select id="monthSelect"><option value="2026-07" selected>July 2026</option><option value="2026-06">June 2026</option></select>
   </div>
 
   <div class="control-box">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg>
-    <select id="adminSelect"></select>
+    <select id="adminSelect"><option value="All" selected>All Team</option><option value="มายมิ้น">มายมิ้น</option><option value="น้ำทิพ">น้ำทิพ</option><option value="อ้น">อ้น</option></select>
   </div>
 
   <button class="refresh-btn" id="refreshBtn" type="button">
@@ -5495,7 +5495,7 @@ body, button, select, input, textarea {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20a7 7 0 0 1 14 0"></path></svg>
                 </div>
               </div>
-              <div class="kpi-sub" id="kpiTargetText">Target 0</div>
+              <div class="kpi-sub" id="kpiTargetText">Target 1,000</div>
               <div class="progress"><div id="progressBar"></div></div>
             </div>
           </div>
@@ -5505,7 +5505,7 @@ body, button, select, input, textarea {
               <div class="kpi-head">
                 <div>
                   <div class="kpi-label">Remaining Leads</div>
-                  <div class="kpi-value" id="kpiRemaining">0</div>
+                  <div class="kpi-value" id="kpiRemaining">1,000</div>
                 </div>
                 <div class="kpi-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>
@@ -5545,15 +5545,15 @@ body, button, select, input, textarea {
               <div class="overview-mini-grid">
                 <div class="overview-mini-box">
                   <span id="overviewLabel1">Daily</span>
-                  <strong id="overviewDaily">400</strong>
+                  <strong id="overviewDaily">32</strong>
                 </div>
                 <div class="overview-mini-box">
                   <span id="overviewLabel2">CR</span>
-                  <strong id="overviewCrGoal">18%</strong>
+                  <strong id="overviewCrGoal">11%</strong>
                 </div>
                 <div class="overview-mini-box">
                   <span id="overviewLabel3">Inbox / Month</span>
-                  <strong id="overviewInboxGoal">1,800</strong>
+                  <strong id="overviewInboxGoal">1,000</strong>
                 </div>
               </div>
             </div>
@@ -5663,25 +5663,52 @@ body, button, select, input, textarea {
   </div>
 
   <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbzXbsFXqGaSt-aXkmTor1M1QiXQKzJqIJxtCtLtUYWAD1nyxoNj-I-A5e9IOGonY1rq/exec';    // เปิดเว็บมาให้เข้าเดือนมิถุนายน 2026 ทันที
-    const DEFAULT_MONTH_KEY = '2026-06';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzXbsFXqGaSt-aXkmTor1M1QiXQKzJqIJxtCtLtUYWAD1nyxoNj-I-A5e9IOGonY1rq/exec';
 
-    // ใส่ Spreadsheet ID ของแต่ละเดือนตรงนี้
-    // ตอนนี้ใส่เดือน June ให้แล้ว ถ้าต้องการ April/May ให้กลับมา ต้องใส่ ID ของไฟล์ 2604/2605 เพิ่ม
+// เดือนที่เปิดหน้าเว็บมาแล้วให้แสดงก่อน
+// ตอนนี้จะเริ่มทำ July 2026
+// V4 fix: July/April/May stay in dropdown; April ID is added; if a monthly sheet parses dates weirdly, it is also mapped to its configured month.
+const DEFAULT_MONTH_KEY = '2026-07';
+
+// ใส่ Spreadsheet ID ของแต่ละเดือน
+// ห้ามแก้ June ถ้า June ใช้งานประชุมได้ปกติอยู่แล้ว
 const MONTH_SHEET_IDS = {
-  '2026-06': '1-S2FIpQ6xBkw5-fINLhbpm50dWVvuk8fyJ0g9KsU-9Y'
+  // สำคัญ: ต้องวาง Spreadsheet ID ของไฟล์ Inbox Report - 2607 ตรงนี้ก่อน July ถึงจะดึงข้อมูลจริงได้
+  '2026-07': '1Y5kSCcnGlxeuaJ9j7bDUH-T-EbWdjJ4--1eAUMSvxPw',
+
+  // ห้ามแก้ June ถ้า June ใช้งานประชุมได้ปกติอยู่แล้ว
+  '2026-06': '1-S2FIpQ6xBkw5-fINLhbpm50dWVvuk8fyJ0g9KsU-9Y',
+
+  // ถ้ามีไฟล์ May แยก ให้ใส่ ID ตรงนี้; ถ้ายังว่าง ระบบยังอ่าน May จากข้อมูลที่มีในไฟล์ June ได้ตามเดิม
+  '2026-05': '',
+
+  // April ID จากโปรเจกต์เดิม ใส่ไว้ให้แล้ว ถ้ายังไม่ขึ้น ให้เช็กสิทธิ์แชร์ไฟล์ให้บัญชี Apps Script
+  '2026-04': '1sdl9KzGZZrNF3oVvtD_K1P2lCDkf3Km2SKAnlPoHllg'
 };
 
-    const DEFAULT_TARGET = 800;
-    const MONTH_LEAD_TARGETS = {
-      '2026-06': 1400,
-      '2026-05': 1800,
-      '2026-04': 800,
-      default: DEFAULT_TARGET
-    };
+// Target รายเดือน
+const DEFAULT_TARGET = 1000;
 
-    const OVERVIEW_GOALS = { daily: 400, cr: 18, inboxMonthly: 1800 };
-  const MONTH_OVERVIEW_GOALS = {
+const MONTH_LEAD_TARGETS = {
+  '2026-07': 1000,
+  '2026-06': 1400,
+  '2026-05': 1800,
+  '2026-04': 800,
+  default: DEFAULT_TARGET
+};
+
+// เป้าหมายกล่อง Team Overview
+const OVERVIEW_GOALS = { daily: 32, cr: 11, inboxMonthly: 1000 };
+
+const MONTH_OVERVIEW_GOALS = {
+  '2026-07': {
+    label1: 'DAILY',
+    value1: 32,
+    label2: 'CR',
+    value2: '12%',
+    label3: 'INBOX / MONTH',
+    value3: 1000
+  },
   '2026-06': {
     label1: 'DAILY',
     value1: 46,
@@ -5690,13 +5717,29 @@ const MONTH_SHEET_IDS = {
     label3: 'INBOX / MONTH',
     value3: 1400
   },
-  default: {
+  '2026-05': {
     label1: 'DAILY',
     value1: 400,
     label2: 'CR',
     value2: '18%',
     label3: 'INBOX / MONTH',
     value3: 1800
+  },
+  '2026-04': {
+    label1: 'DAILY',
+    value1: 400,
+    label2: 'CR',
+    value2: '18%',
+    label3: 'INBOX / MONTH',
+    value3: 800
+  },
+  default: {
+    label1: 'DAILY',
+    value1: 0,
+    label2: 'CR',
+    value2: '0%',
+    label3: 'INBOX / MONTH',
+    value3: 0
   }
 };
 
@@ -6176,7 +6219,7 @@ const PROFILE_PHOTOS = {
   'kae': './Kae.jpg',
   'lock': './Lock.jpg',
   'mint': './Mint.jpg',
-
+  'mymint patcha': './mymint.jpg',
   'mymint': './mymint.jpg',
   'mymint patcha': './mymint.jpg',
   'mymint patcha': './mymint.jpg',
@@ -6190,6 +6233,8 @@ const PROFILE_PHOTOS = {
   'namwan': './Namwhan.jpg',
   'น้ำหวาน': './Namwhan.jpg',
 
+  'hong': './Hong.jpg',
+
   'new': './New.jpg',
   'nut': './Nut4.jpg',
   'nut4': './Nut4.jpg',
@@ -6198,6 +6243,9 @@ const PROFILE_PHOTOS = {
   'pop': './pop.jpg',
   'queen': './Queen.jpg',
   'yuu': './Yuu.jpg'
+  
+  
+
 };
  function getProfilePhoto(name) {
   const raw = safeText(name, '').trim();
@@ -7345,12 +7393,12 @@ function getTodayLeadCount(item, monthData) {
 
     function normalizeDashboardPayload(payload) {
       if (payload && payload.months) return payload;
+
+      const requestedMonthKey = String(payload?.__requestedMonthKey || '').trim();
       const sheets = payload?.sheets || {};
       const pancakeRaw = Array.isArray(sheets[SHEET_PANCAKE_NAME]) ? sheets[SHEET_PANCAKE_NAME] : [];
       const crmRaw = Array.isArray(sheets[SHEET_CRM_NAME]) ? sheets[SHEET_CRM_NAME] : [];
-      const pancakeRows = pancakeRaw
-        .map(normalizePancakeLead)
-        .filter((r) => isFocusAdminName(r.owner || r.addedBy));
+      const pancakeRows = pancakeRaw.map(normalizePancakeLead).filter((r) => r.owner && r.owner !== 'Unknown');
       const crmRows = crmRaw.map(normalizeCrmLead);
       const recentRowsSource = crmRows.length ? crmRows : pancakeRows;
       const monthsMap = new Map();
@@ -7361,13 +7409,16 @@ function getTodayLeadCount(item, monthData) {
         if (!monthsMap.has(key)) monthsMap.set(key, []);
         monthsMap.get(key).push(row);
       });
-      if (!monthsMap.size) monthsMap.set(toMonthKey(new Date()), []);
 
-      const months = {};
-      Array.from(monthsMap.entries()).forEach(([monthKey, rows]) => {
+      if (!monthsMap.size) {
+        monthsMap.set(requestedMonthKey || toMonthKey(new Date()), []);
+      }
+
+      const buildMonthObject = (monthKey, rows) => {
         const monthLeadTarget = getMonthLeadTarget(monthKey);
         const admins = [...new Set(rows.map((r) => r.owner).filter(Boolean))].sort();
         const views = { All: buildView(rows, monthLeadTarget) };
+
         admins.forEach((admin) => {
           views[admin] = buildView(rows.filter((r) => r.owner === admin), monthLeadTarget);
         });
@@ -7376,9 +7427,12 @@ function getTodayLeadCount(item, monthData) {
           const d = parseSheetDate(r.dateLabel || r.date);
           return toMonthKey(d) === monthKey;
         });
-        if (recentForMonth.length) views.All.recentLeads = buildView(recentForMonth, monthLeadTarget).recentLeads;
 
-        months[monthKey] = {
+        if (recentForMonth.length) {
+          views.All.recentLeads = buildView(recentForMonth, monthLeadTarget).recentLeads;
+        }
+
+        return {
           key: monthKey,
           label: toMonthLabel(monthKey),
           targetConfig: { All: monthLeadTarget, overallLeadTarget: monthLeadTarget },
@@ -7386,9 +7440,23 @@ function getTodayLeadCount(item, monthData) {
           views,
           allLeads: rows,
           leads: rows,
-          rows
+          rows,
+          sourceSpreadsheetId: payload?.spreadsheetId || payload?.__requestedSheetId || '',
+          requestedMonthKey
         };
+      };
+
+      const months = {};
+      Array.from(monthsMap.entries()).forEach(([monthKey, rows]) => {
+        months[monthKey] = buildMonthObject(monthKey, rows);
       });
+
+      // Safety net for monthly files:
+      // If we loaded a specific month sheet (ex. 2607) but Google date formatting parsed rows into another month,
+      // also show those rows under the month selected in MONTH_SHEET_IDS. This does NOT affect June/May if they already parsed normally.
+      if (requestedMonthKey && requestedMonthKey !== 'default' && !months[requestedMonthKey] && pancakeRows.length) {
+        months[requestedMonthKey] = buildMonthObject(requestedMonthKey, pancakeRows);
+      }
 
       const monthOrder = Object.keys(months).sort().reverse();
       const admins = ['All', ...FOCUS_ADMINS];
@@ -7466,137 +7534,114 @@ function renderRecentLeads(rows) {
       renderRecentLeads(view.recentLeads || []);
     }
 
-  function buildApiUrl(sheetId, callbackName) {
-    const params = new URLSearchParams();
-
-    if (sheetId) {
-      params.set('sheetId', sheetId);
-    }
-
-    params.set('callback', callbackName);
-
-    return API_URL + '?' + params.toString();
-  }
-
-  function fetchDashboardJson(sheetId) {
-    return new Promise((resolve, reject) => {
-      const callbackName = `jsonpCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-      const finalUrl = buildApiUrl(sheetId, callbackName);
-      const script = document.createElement('script');
-
-      const cleanup = () => {
-        try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
-        if (script.parentNode) script.parentNode.removeChild(script);
-      };
-
-      const timeout = setTimeout(() => {
-        cleanup();
-        reject(new Error('JSONP timeout'));
-      }, 45000);
-
-      window[callbackName] = (data) => {
-        clearTimeout(timeout);
-        cleanup();
-        resolve(data);
-      };
-
-      script.onerror = () => {
-        clearTimeout(timeout);
-        cleanup();
-        reject(new Error('JSONP load failed'));
-      };
-
-      script.src = finalUrl;
-      document.body.appendChild(script);
-    });
-  }
-
-    function mergeDashboardDataPayloads(payloads) {
-      const merged = {
-        lastUpdated: new Date().toISOString(),
-        monthOrder: [],
-        months: {},
-        admins: ['All', ...FOCUS_ADMINS]
-      };
-
-      payloads.forEach((payload) => {
-        const normalized = normalizeDashboardPayload(payload);
-        if (!normalized || !normalized.months) return;
-        merged.lastUpdated = normalized.lastUpdated || merged.lastUpdated;
-        Object.keys(normalized.months).forEach((monthKey) => {
-          merged.months[monthKey] = normalized.months[monthKey];
-        });
-      });
-
-      merged.monthOrder = Object.keys(merged.months).sort().reverse();
-      return merged;
-    }
-
     async function loadDashboardData(options = {}) {
-      const silent = !!options.silent;
-      const force = !!options.force;
-      if (isLoading && !force) return;
-      if (force) isLoading = false;
-      if (!API_URL || API_URL.includes('PASTE_URL_HERE') || API_URL.includes('PASTE')) {
-        showToast('API URL Missing', 'Please add the Apps Script Web App URL to API_URL first.');
-        return;
-      }
+  const silent = !!options.silent;
+  const force = !!options.force;
 
-      isLoading = true;
-      if (!silent) {
-        refreshBtn.disabled = true;
-        refreshBtn.classList.add('is-loading');
-        refreshBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg><span>Loading...</span>`;
-      }
+  if (isLoading && !force) return;
+  if (force) isLoading = false;
+
+  if (!API_URL || API_URL.includes('PASTE_URL_HERE') || API_URL.includes('PASTE')) {
+    showToast('API URL Missing', 'Please add the Apps Script Web App URL to API_URL first.');
+    return;
+  }
+
+  isLoading = true;
+
+  if (!silent) {
+    refreshBtn.disabled = true;
+    refreshBtn.classList.add('is-loading');
+    refreshBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg><span>Loading...</span>`;
+  }
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 12000);
 
       try {
-        const sheetIds = Object.values(MONTH_SHEET_IDS || {}).filter(Boolean);
-        const payloads = [];
+        const res = await fetch(`${API_URL}${API_URL.includes('?') ? '&' : '?'}_=${Date.now()}`, {
+          cache: 'no-store',
+          signal: controller.signal
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        for (const sheetId of sheetIds) {
-          // ใช้ JSONP เพื่อกันปัญหา CORS/โหลดจาก local file แล้ว fetch ไม่ผ่าน
-          payloads.push(await fetchDashboardJson(sheetId));
-        }
-
-        let newData = mergeDashboardDataPayloads(payloads);
+        let newData = await res.json();
+        newData = normalizeDashboardPayload(newData);
         if (!newData || typeof newData !== 'object' || !newData.months) throw new Error('Invalid dashboard data');
 
-        checkNewLeadNotification(newData);
-        dashboardData = newData;
+    checkNewLeadNotification(newData);
+    dashboardData = newData;
 
-        const preferredMonth = getPreferredMonthKey(dashboardData.months || {});
-        const currentMonth = monthSelect.value && dashboardData.months[monthSelect.value]
-          ? monthSelect.value
-          : preferredMonth;
-        const currentAdmin = adminSelect.value || 'All';
+    const preferredMonth = getPreferredMonthKey(dashboardData.months || {});
+    const currentMonth = monthSelect.value && dashboardData.months[monthSelect.value]
+      ? monthSelect.value
+      : preferredMonth;
 
-        const monthList = Array.isArray(dashboardData.monthOrder)
-          ? dashboardData.monthOrder.map((key) => ({ key, label: dashboardData.months[key]?.label || key }))
-          : Object.keys(dashboardData.months || {}).map((key) => ({ key, label: dashboardData.months[key]?.label || key }));
+    const currentAdmin = adminSelect.value || 'All';
 
-        renderMonthOptions(monthList);
-        if (currentMonth) monthSelect.value = currentMonth;
-        renderAdminOptions(dashboardData.admins || ['All']);
-        if ([...adminSelect.options].some((o) => o.value === currentAdmin)) adminSelect.value = currentAdmin;
-        renderDashboard(monthSelect.value);
-        hasLoadedOnce = true;
-      } catch (error) {
-        console.error(error);
-        const msg = error.name === 'AbortError' ? 'Loading took too long. The dashboard will retry on the next refresh.' : 'Could not load data. The dashboard will retry automatically.';
-        document.getElementById('lastUpdatedText').innerHTML = `${iconCalendar()}<span>${msg}</span>`;
-        setLiveSyncState('error', 'Sync Error');
-        if (!silent) showToast('Data Load Failed', msg, 'info');
-      } finally {
-        clearTimeout(timeoutId);
-        isLoading = false;
-        refreshBtn.disabled = false;
-        refreshBtn.classList.remove('is-loading');
-        refreshBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg><span>Refresh Data</span>`;
-      }
+    const monthList = Array.isArray(dashboardData.monthOrder)
+      ? dashboardData.monthOrder.map((key) => ({
+          key,
+          label: dashboardData.months[key]?.label || key
+        }))
+      : Object.keys(dashboardData.months || {}).map((key) => ({
+          key,
+          label: dashboardData.months[key]?.label || key
+        }));
+
+    renderMonthOptions(monthList);
+
+    if (currentMonth) monthSelect.value = currentMonth;
+
+    renderAdminOptions(dashboardData.admins || ['All']);
+
+    if ([...adminSelect.options].some((o) => o.value === currentAdmin)) {
+      adminSelect.value = currentAdmin;
     }
+
+    renderDashboard(monthSelect.value);
+    hasLoadedOnce = true;
+
+    const missingSheetMonths = Object.entries(MONTH_SHEET_IDS || {})
+      .filter(([key, value]) => !String(value || '').trim())
+      .map(([key]) => key);
+
+    if (missingSheetMonths.includes(monthSelect.value) && !silent) {
+      showToast('Missing Spreadsheet ID', `${monthSelect.value} ยังไม่ได้ใส่ Spreadsheet ID จึงแสดงได้แค่ Target ไม่ดึงข้อมูลจริง`, 'info');
+    }
+
+    if (failedMonths.length && !silent) {
+      showToast(
+        'Some months skipped',
+        failedMonths.slice(0, 3).join(' | '),
+        'info'
+      );
+    }
+
+  } catch (error) {
+    console.error(error);
+
+    const rawMsg = error && error.message ? error.message : 'Unknown error';
+    const msg = error.name === 'AbortError'
+      ? 'Loading took too long. The dashboard will retry on the next refresh.'
+      : `Could not load data: ${rawMsg}`;
+
+    if (!hasLoadedOnce) {
+      renderDashboardFallback(msg);
+    } else {
+      document.getElementById('lastUpdatedText').innerHTML = `${iconCalendar()}<span>${msg}</span>`;
+      setLiveSyncState('error', 'Sync Error');
+    }
+
+    if (!silent) showToast('Data Load Failed', msg, 'info');
+
+  } finally {
+    clearTimeout(timeoutId);
+    isLoading = false;
+    refreshBtn.disabled = false;
+    refreshBtn.classList.remove('is-loading');
+    refreshBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg><span>Refresh Data</span>`;
+  }
+}
 
     monthSelect.addEventListener('change', (e) => {
       renderDashboard(e.target.value);
@@ -7722,6 +7767,9 @@ function renderRecentLeads(rows) {
 
     updateSoundButton();
     setupPwaInstall();
+
+    // Show July targets immediately, even before Google Sheets finishes loading.
+    renderDashboardFallback('July 2026 ready. Waiting for Google Sheets data...');
 
     loadDashboardData({ silent: false });
     setInterval(() => loadDashboardData({ silent: true }), 5000);
