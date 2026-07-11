@@ -7570,7 +7570,19 @@ function renderRecentLeads(rows) {
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        let newData = await res.json();
+        const textData = await res.text();
+
+        // ตรวจสอบว่าสิ่งที่ส่งกลับมาเป็นหน้าเว็บเออเรอร์ของ Google หรือไม่
+        if (textData.includes("Google ไดรฟ์") || textData.includes("ไม่สามารถเปิดไฟล์ได้")) {
+            throw new Error("สิทธิ์การเข้าถึงลิงก์ Apps Script ไม่ถูกต้อง (Permission Denied)");
+        }
+
+        // ถ้าข้อมูลติดรูปแบบ callback({...}) มา ให้แกะคำออกให้เหลือแต่ JSON ไส้ใน
+        const cleanJson = textData.startsWith('callback(') 
+            ? textData.slice(9, -2) 
+            : textData;
+
+        let newData = JSON.parse(cleanJson);
         newData = normalizeDashboardPayload(newData);
         if (!newData || typeof newData !== 'object' || !newData.months) throw new Error('Invalid dashboard data');
 
