@@ -7578,13 +7578,42 @@ function renderRecentLeads(rows) {
   }, 60000);
 
   try {
-    const requestUrl =
-      `${API_URL}${API_URL.includes('?') ? '&' : '?'}_=${Date.now()}`;
+   const requestedMonthKey =
+  monthSelect.value &&
+  MONTH_SHEET_IDS[monthSelect.value]
+    ? monthSelect.value
+    : DEFAULT_MONTH_KEY;
 
-    const res = await fetch(requestUrl, {
-      cache: 'no-store',
-      signal: controller.signal
-    });
+const requestedSheetId =
+  MONTH_SHEET_IDS[requestedMonthKey];
+
+if (!requestedSheetId) {
+  throw new Error(
+    `Missing Spreadsheet ID for ${requestedMonthKey}`
+  );
+}
+
+const queryParams = new URLSearchParams({
+  sheetId: requestedSheetId,
+  sheetName: '3. data lead pancake',
+  monthKey: requestedMonthKey,
+  _: String(Date.now())
+});
+
+const requestUrl =
+  `${API_URL}?${queryParams.toString()}`;
+
+console.log(
+  'Loading dashboard:',
+  requestedMonthKey,
+  requestedSheetId,
+  requestUrl
+);
+
+   const res = await fetch(requestUrl, {
+  cache: 'no-store',
+  signal: controller.signal
+});
 
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
