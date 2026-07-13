@@ -7541,8 +7541,10 @@ function renderRecentLeads(rows) {
     }
 
     async function loadDashboardData(options = {}) {
+      let failedMonths = [];
   const silent = !!options.silent;
   const force = !!options.force;
+
 
   if (isLoading && !force) return;
   if (force) isLoading = false;
@@ -7564,30 +7566,30 @@ function renderRecentLeads(rows) {
       const timeoutId = setTimeout(() => controller.abort(), 12000);
 
       try {
-        const res = await fetch(`${API_URL}${API_URL.includes('?') ? '&' : '?'}_=${Date.now()}`, {
-          cache: 'no-store',
-          signal: controller.signal
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const res = await fetch(`${API_URL}${API_URL.includes('?') ? '&' : '?'}_=${Date.now()}`, {
+                cache: 'no-store',
+                signal: controller.signal
+            });
 
-        const textData = await res.text();
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        // ตรวจสอบว่าสิ่งที่ส่งกลับมาเป็นหน้าเว็บเออเรอร์ของ Google หรือไม่
-        if (textData.includes("Google ไดรฟ์") || textData.includes("ไม่สามารถเปิดไฟล์ได้")) {
-            throw new Error("สิทธิ์การเข้าถึงลิงก์ Apps Script ไม่ถูกต้อง (Permission Denied)");
-        }
+            // === วางโค้ดก้อนนี้ไว้ด้านล่าง res.ok เหมือนเดิมครับ ===
+            const textData = await res.text();
 
-        // ถ้าข้อมูลติดรูปแบบ callback({...}) มา ให้แกะคำออกให้เหลือแต่ JSON ไส้ใน
-        const cleanJson = textData.startsWith('callback(') 
-            ? textData.slice(9, -2) 
-            : textData;
+            const cleanJson = textData.trim().startsWith('callback(') 
+                ? textData.trim().slice(9, -2) 
+                : textData;
 
-        let newData = JSON.parse(cleanJson);
-        newData = normalizeDashboardPayload(newData);
-        if (!newData || typeof newData !== 'object' || !newData.months) throw new Error('Invalid dashboard data');
+            let newData = JSON.parse(cleanJson);
+            newData = normalizeDashboardPayload(newData);
+            // ===============================================
 
-    checkNewLeadNotification(newData);
-    dashboardData = newData;
+            if (!newData || typeof newData !== 'object' || !newData.months) throw new Error('Invalid dashboard data');
+
+            checkNewLeadNotification(newData);
+            dashboardData = newData;
+
+            // ... (โค้ดดึง preferredMonth ด้านล่างปล่อยไว้เหมือนเดิม) ...
 
     const preferredMonth = getPreferredMonthKey(dashboardData.months || {});
     const currentMonth = monthSelect.value && dashboardData.months[monthSelect.value]
