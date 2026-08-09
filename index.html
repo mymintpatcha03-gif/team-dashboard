@@ -5670,36 +5670,62 @@ body, button, select, input, textarea {
 }
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbweMQd_inKVr55jTXDH5ufa2zV5oSovHoKRhGXlO4EOKZul9n8ehsnOcGEs5eidYOBy/exec';
+// ======================================================
+// MONTH CONFIG
+// ======================================================
 
-// เดือนที่เปิดหน้าเว็บมาแล้วให้แสดงก่อน
-// ตอนนี้จะเริ่มทำ July 2026
-// V4 fix: July/April/May stay in dropdown; April ID is added; if a monthly sheet parses dates weirdly, it is also mapped to its configured month.
-const DEFAULT_MONTH_KEY = '2026-07';
+// เดือนที่เปิด Dashboard แล้วให้แสดงเป็นค่าเริ่มต้น
+// Current default: August 2026
+const DEFAULT_MONTH_KEY = '2026-08';
 
-// ใส่ Spreadsheet ID ของแต่ละเดือน
-// ห้ามแก้ June ถ้า June ใช้งานประชุมได้ปกติอยู่แล้ว
+// Spreadsheet ID ของแต่ละเดือน
+// สำคัญ: ห้ามลบ ID เดือนเก่า เพราะใช้สำหรับเลือกดูข้อมูลย้อนหลัง
 const MONTH_SHEET_IDS = {
-  // สำคัญ: ต้องวาง Spreadsheet ID ของไฟล์ Inbox Report - 2607 ตรงนี้ก่อน July ถึงจะดึงข้อมูลจริงได้
+
+  // August 2026
+  // Inbox Report - 2608
+  '2026-08': '16tIk-qqDVRr_wwCBU-P8uueBPJsHJ5xYqxTVmNVWjss',
+
+  // July 2026
+  // Inbox Report - 2607
   '2026-07': '1Y5kSCcnGlxeuaJ9j7bDUH-T-EbWdjJ4--1eAUMSvxPw',
 
-  // ห้ามแก้ June ถ้า June ใช้งานประชุมได้ปกติอยู่แล้ว
+  // June 2026
+  // ห้ามแก้ ID นี้ ถ้า June ยังทำงานปกติ
   '2026-06': '1-S2FIpQ6xBkw5-fINLhbpm50dWVvuk8fyJ0g9KsU-9Y',
 
-  // ถ้ามีไฟล์ May แยก ให้ใส่ ID ตรงนี้; ถ้ายังว่าง ระบบยังอ่าน May จากข้อมูลที่มีในไฟล์ June ได้ตามเดิม
+  // May 2026
+  // ถ้ามีไฟล์ May แยกในอนาคต ค่อยใส่ Spreadsheet ID
   '2026-05': '',
 
-  // April ID จากโปรเจกต์เดิม ใส่ไว้ให้แล้ว ถ้ายังไม่ขึ้น ให้เช็กสิทธิ์แชร์ไฟล์ให้บัญชี Apps Script
+  // April 2026
   '2026-04': '1sdl9KzGZZrNF3oVvtD_K1P2lCDkf3Km2SKAnlPoHllg'
 };
 
-// Target รายเดือน
+
+// ======================================================
+// MONTHLY TARGET
+// ======================================================
+
 const DEFAULT_TARGET = 1000;
 
 const MONTH_LEAD_TARGETS = {
+
+  // August 2026
+  '2026-08': 781,
+
+  // July 2026
   '2026-07': 1000,
+
+  // June 2026
   '2026-06': 1400,
+
+  // May 2026
   '2026-05': 1800,
+
+  // April 2026
   '2026-04': 800,
+
   default: DEFAULT_TARGET
 };
 
@@ -5707,6 +5733,14 @@ const MONTH_LEAD_TARGETS = {
 const OVERVIEW_GOALS = { daily: 32, cr: 11, inboxMonthly: 1000 };
 
 const MONTH_OVERVIEW_GOALS = {
+   '2026-08': {
+    label1: 'DAILY',
+    value1: 26,
+    label2: 'CR',
+    value2: '15%',
+    label3: 'INBOX / MONTH',
+    value3: 5203
+  },
   '2026-07': {
     label1: 'DAILY',
     value1: 32,
