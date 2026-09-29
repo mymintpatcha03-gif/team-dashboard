@@ -5393,6 +5393,117 @@ body, button, select, input, textarea {
     grid-template-columns: 1fr !important;
   }
 }
+@media (max-width: 720px) {
+  .cr2-stats {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =====================================================
+   DASHBOARD LOADING UX
+===================================================== */
+
+.main {
+  position: relative;
+}
+
+.page-shell {
+  transition:
+    opacity 0.25s ease,
+    filter 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* ... CSS Loading ที่ส่งให้ทั้งหมด ... */
+.dashboard-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(241, 246, 255, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.dashboard-loading-overlay.is-hiding {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.dashboard-loading-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  min-width: 360px;
+  padding: 24px 28px;
+
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(210, 222, 240, 0.9);
+  border-radius: 24px;
+
+  box-shadow: 0 24px 70px rgba(32, 71, 130, 0.18);
+}
+
+.dashboard-loading-spinner {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+
+  border: 4px solid #dbe8ff;
+  border-top-color: #3478f6;
+  border-radius: 50%;
+
+  animation: dashboardSpin 0.8s linear infinite;
+}
+
+.dashboard-loading-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dashboard-loading-content strong {
+  color: #102f55;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.dashboard-loading-content span {
+  color: #7186a5;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@keyframes dashboardSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-loading-overlay {
+    padding-left: 0;
+  }
+
+  .dashboard-loading-card {
+    min-width: auto;
+    width: calc(100% - 40px);
+    max-width: 360px;
+  }
+}
+
+/* CSS จบตรงนี้ */
+
 </style>
 
 </head>
@@ -5441,6 +5552,22 @@ body, button, select, input, textarea {
     </aside>
 
     <main class="main" id="dashboard">
+      <!-- Dashboard Loading Overlay -->
+<div id="dashboardLoadingOverlay" class="dashboard-loading-overlay">
+  <div class="dashboard-loading-card">
+    <div class="dashboard-loader"></div>
+
+    <div class="dashboard-loading-content">
+      <strong id="dashboardLoadingTitle">
+        Loading dashboard...
+      </strong>
+
+      <span id="dashboardLoadingSubtitle">
+        Syncing with Google Sheets
+      </span>
+    </div>
+  </div>
+</div>
       <div class="page-shell">
         <div class="topbar">
           <div class="headline">
@@ -5454,8 +5581,9 @@ body, button, select, input, textarea {
      <div class="controls">
   <div class="control-box">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg>
-    <select id="monthSelect">
-  <option value="2026-08" selected>August 2026</option>
+<select id="monthSelect">
+  <option value="2026-09" selected>September 2026</option>
+  <option value="2026-08">August 2026</option>
   <option value="2026-07">July 2026</option>
   <option value="2026-06">June 2026</option>
   <option value="2026-05">May 2026</option>
@@ -5675,18 +5803,21 @@ body, button, select, input, textarea {
     showToast(toastMsg, 'error');
 }
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbweMQd_inKVr55jTXDH5ufa2zV5oSovHoKRhGXlO4EOKZul9n8ehsnOcGEs5eidYOBy/exec';
-// ======================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbyd-Xw-gIHfutLm4vQBZfILI_F-h4TyNgPLDbODr7FPqcwULTtDwjA50VS29B8b853ohA/exec';// ======================================================
 // MONTH CONFIG
 // ======================================================
 
 // เดือนที่เปิด Dashboard แล้วให้แสดงเป็นค่าเริ่มต้น
-// Current default: August 2026
-const DEFAULT_MONTH_KEY = '2026-08';
+// Current default: September 2026 
+const DEFAULT_MONTH_KEY = '2026-09';
 
 // Spreadsheet ID ของแต่ละเดือน
 // สำคัญ: ห้ามลบ ID เดือนเก่า เพราะใช้สำหรับเลือกดูข้อมูลย้อนหลัง
 const MONTH_SHEET_IDS = {
+
+    // September 2026
+  // Inbox Report - 2609
+  '2026-09': '1oDlegoKtGPoQIX8IOVhlH2811EQ9VheywSNsRI8Dwlk',
 
   // August 2026
   // Inbox Report - 2608
@@ -5717,6 +5848,9 @@ const DEFAULT_TARGET = 1000;
 
 const MONTH_LEAD_TARGETS = {
 
+  // September 2026
+  '2026-09': 876,
+
   // August 2026
   '2026-08': 781,
 
@@ -5734,12 +5868,23 @@ const MONTH_LEAD_TARGETS = {
 
   default: DEFAULT_TARGET
 };
-
 // เป้าหมายกล่อง Team Overview
 const OVERVIEW_GOALS = { daily: 32, cr: 11, inboxMonthly: 1000 };
 
 const MONTH_OVERVIEW_GOALS = {
-   '2026-08': {
+
+  // September 2026
+  '2026-09': {
+    label1: 'DAILY',
+    value1: 30,
+    label2: 'CR',
+    value2: '15%',
+    label3: 'INBOX / MONTH',
+    value3: 5915
+  },
+
+  // August 2026
+  '2026-08': {
     label1: 'DAILY',
     value1: 26,
     label2: 'CR',
@@ -5747,6 +5892,8 @@ const MONTH_OVERVIEW_GOALS = {
     label3: 'INBOX / MONTH',
     value3: 5203
   },
+
+  // July 2026
   '2026-07': {
     label1: 'DAILY',
     value1: 32,
@@ -5755,6 +5902,8 @@ const MONTH_OVERVIEW_GOALS = {
     label3: 'INBOX / MONTH',
     value3: 1000
   },
+
+  // June 2026
   '2026-06': {
     label1: 'DAILY',
     value1: 46,
@@ -5763,6 +5912,8 @@ const MONTH_OVERVIEW_GOALS = {
     label3: 'INBOX / MONTH',
     value3: 1400
   },
+
+  // May 2026
   '2026-05': {
     label1: 'DAILY',
     value1: 400,
@@ -5771,6 +5922,8 @@ const MONTH_OVERVIEW_GOALS = {
     label3: 'INBOX / MONTH',
     value3: 1800
   },
+
+  // April 2026
   '2026-04': {
     label1: 'DAILY',
     value1: 400,
@@ -5779,6 +5932,7 @@ const MONTH_OVERVIEW_GOALS = {
     label3: 'INBOX / MONTH',
     value3: 800
   },
+
   default: {
     label1: 'DAILY',
     value1: 0,
@@ -5788,7 +5942,6 @@ const MONTH_OVERVIEW_GOALS = {
     value3: 0
   }
 };
-
     function getMonthLeadTarget(monthKey) {
       return MONTH_LEAD_TARGETS[monthKey] ?? MONTH_LEAD_TARGETS.default;
     }
@@ -6125,20 +6278,53 @@ const MONTH_OVERVIEW_GOALS = {
       return out;
     }
 
-    function normalizeMonthLabel(monthKey) {
-      return translateMonthLabel(monthKey || 'Unknown');
+   function normalizeMonthLabel(monthKey) {
+  const match = String(monthKey || '').match(/^(\d{4})-(\d{2})$/);
+
+  if (match) {
+    const [, year, month] = match;
+    const monthNames = [
+      'January', 'February', 'March', 'April',
+      'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
+    ];
+
+    return `${monthNames[Number(month) - 1]} ${year}`;
+  }
+
+  return translateMonthLabel(monthKey || 'Unknown');
+}
+
+function renderMonthOptions(months) {  // เก็บเดือนที่กำลังเลือกอยู่
+  const currentValue = monthSelect.value || DEFAULT_MONTH_KEY;
+
+  // ใช้ MONTH_SHEET_IDS เป็นรายการเดือนหลัก
+  const monthKeys = Object.keys(MONTH_SHEET_IDS)
+    .filter(key => MONTH_SHEET_IDS[key])
+    .sort((a, b) => b.localeCompare(a));
+
+  monthSelect.innerHTML = '';
+
+  monthKeys.forEach((key) => {
+    const option = document.createElement('option');
+
+    option.value = key;
+    option.textContent = translateMonthLabel(
+      normalizeMonthLabel(key)
+    );
+
+    if (key === currentValue) {
+      option.selected = true;
     }
 
-    function renderMonthOptions(months) {
-      monthSelect.innerHTML = '';
-      months.forEach((month, index) => {
-        const option = document.createElement('option');
-        option.value = month.key;
-        option.textContent = translateMonthLabel(month.label || normalizeMonthLabel(month.key));
-        if (index === 0) option.selected = true;
-        monthSelect.appendChild(option);
-      });
-    }
+    monthSelect.appendChild(option);
+  });
+
+  // ถ้าค่าเดิมไม่มี ให้เลือกเดือน default
+  if (!monthKeys.includes(currentValue)) {
+    monthSelect.value = DEFAULT_MONTH_KEY;
+  }
+}
 
     function renderAdminOptions(admins) {
       adminSelect.innerHTML = '';
@@ -6269,6 +6455,10 @@ const PROFILE_PHOTOS = {
   'mymint': './mymint.jpg',
   'mymint patcha': './mymint.jpg',
   'mymint patcha': './mymint.jpg',
+
+  'peem': './Peem.jpeg',
+'peem pidchapa': './Peem.jpeg',
+'pidchapa': './Peem.jpeg',
 
   'namthip': './namthip.jpg',
   'thip': './namthip.jpg',
@@ -6495,8 +6685,14 @@ function getTodayLeadCount(item, monthData) {
 
       container.classList.add('admin-raw-grid');
       const sortBy = adminSortSelect?.value || 'leads';
-      const sortedItems = [...items].filter((item) => isFocusAdminName(item.adminName)).sort((a, b) => {
-        if (sortBy === 'cr') return safeNumber(b.cr) - safeNumber(a.cr) || safeNumber(b.totalLeads) - safeNumber(a.totalLeads);
+const sortedItems = [...items]
+  .filter((item) =>
+    isFocusAdminName(
+      item.adminName,
+      monthData?.key || DEFAULT_MONTH_KEY
+    )
+  )
+  .sort((a, b) => {        if (sortBy === 'cr') return safeNumber(b.cr) - safeNumber(a.cr) || safeNumber(b.totalLeads) - safeNumber(a.totalLeads);
         if (sortBy === 'today') return getTodayLeadCount(b, monthData) - getTodayLeadCount(a, monthData) || safeNumber(b.totalLeads) - safeNumber(a.totalLeads);
         return safeNumber(b.totalLeads) - safeNumber(a.totalLeads) || safeNumber(b.cr) - safeNumber(a.cr);
       });
@@ -7024,8 +7220,15 @@ function getTodayLeadCount(item, monthData) {
        - Recent Leads ดึงจากชีท "1. data crm" เหมือนเดิม
     */
     const SHEET_CRM_NAME = '1. data crm';
-    const SHEET_PANCAKE_NAME = '3. data lead pancake';
+    const SHEET_PANCAKE_NAME = '3. data lead pancake ';
     const FOCUS_ADMINS = ['Aon On', 'Mymint Patcha', 'Thip Bejay'];
+    const FOCUS_ADMINS_BY_MONTH = {
+  '2026-09': ['Aon On', 'Mymint Patcha', 'Peem Pidchapa']
+};
+
+function getFocusAdminsForMonth(monthKey) {
+  return FOCUS_ADMINS_BY_MONTH[monthKey] || FOCUS_ADMINS;
+}
 
     function pickField(row, keys, fallback = '') {
       for (const key of keys) {
@@ -7043,18 +7246,40 @@ function getTodayLeadCount(item, monthData) {
     }
 
 
-    function normalizeAdminNameForFocus(value) {
-      const name = String(value || '').trim();
-      const lower = name.toLowerCase();
-      if (lower.includes('aon')) return 'Aon On';
-      if (lower.includes('mymint') || lower.includes('my mint')) return 'Mymint Patcha';
-      if (lower.includes('thip bejay') || lower.includes('thip') || lower.includes('namthip') || lower.includes('nam tip')) return 'Thip Bejay';
-      return name || 'Unknown';
-    }
+   function normalizeAdminNameForFocus(value) {
+  const name = String(value || '').trim();
+  const lower = name.toLowerCase();
 
-    function isFocusAdminName(value) {
-      return FOCUS_ADMINS.includes(normalizeAdminNameForFocus(value));
-    }
+  if (lower.includes('aon')) return 'Aon On';
+
+  if (lower.includes('mymint') || lower.includes('my mint')) {
+    return 'Mymint Patcha';
+  }
+
+  if (
+    lower.includes('peem pidchapa') ||
+    lower.includes('peem') ||
+    lower.includes('pidchapa')
+  ) {
+    return 'Peem Pidchapa';
+  }
+
+  if (
+    lower.includes('thip bejay') ||
+    lower.includes('thip') ||
+    lower.includes('namthip') ||
+    lower.includes('nam tip')
+  ) {
+    return 'Thip Bejay';
+  }
+
+  return name || 'Unknown';
+}
+
+    function isFocusAdminName(value, monthKey = DEFAULT_MONTH_KEY) {
+  const admin = normalizeAdminNameForFocus(value);
+  return getFocusAdminsForMonth(monthKey).includes(admin);
+}
 
     function extractRecipientFromCard(value) {
       const text = String(value || '').trim();
@@ -7319,82 +7544,120 @@ function getTodayLeadCount(item, monthData) {
       return s.includes('l6 purchased') || s.includes('purchased') || s.includes('closed') || s.includes('consulted') || s.includes('ซื้อ') || s.includes('ปิด');
     }
 
-    function buildAdminPerformanceFromPancakeRows(rows, targetConfig = {}) {
-      const map = new Map();
-      const focusRows = (rows || []).filter((row) => isFocusAdminName(row.owner || row.addedBy));
-      const activeTodayKey = getActiveTodayKeyForRows(focusRows);
+   function buildAdminPerformanceFromPancakeRows(rows, targetConfig = {}, focusAdmins = FOCUS_ADMINS) {
+  const map = new Map();
 
-      FOCUS_ADMINS.forEach((admin) => {
-        map.set(admin, {
-          adminName: admin,
-          totalLeads: 0,
-          sentToSales: 0,
-          purchased: 0,
-          consulted: 0,
-          closed: 0,
-          today: 0,
-          target: safeNumber(targetConfig?.[admin], 0),
-          remaining: 0,
-          dailyMap: {},
-          recipients: {},
-          todayRecipients: {},
-          sources: { FB: 0, IG: 0, LINE: 0, TikTok: 0, Other: 0 },
-          sourceBreakdown: createEmptyLeadSourceBreakdown(),
-          rows: []
-        });
-      });
+  const focusRows = (rows || []).filter((row) => {
+    const admin = normalizeAdminNameForFocus(row.owner || row.addedBy);
+    return focusAdmins.includes(admin);
+  });
 
-      focusRows.forEach((row) => {
-        const admin = normalizeAdminNameForFocus(row.owner || row.addedBy);
-        if (!map.has(admin)) return;
-        const item = map.get(admin);
-        const dayKey = row.dateKey || toDateKey(parseSheetDate(row.dateLabel || row.date));
-        const recipient = row.recipient || extractRecipientFromCard(row.card || row.name || row.inboxName);
-        const sourceType = detectLeadSource(row, row.sourceType || row.sourceText || 'organic_other');
-        const sourcePlatform = getLeadSourcePlatform(sourceType);
+  const activeTodayKey = getActiveTodayKeyForRows(focusRows);
 
-        item.totalLeads += 1;
-        item.sentToSales += 1;
-        item.rows.push(row);
-        item.dailyMap[dayKey] = (item.dailyMap[dayKey] || 0) + 1;
-        item.recipients[recipient] = (item.recipients[recipient] || 0) + 1;
-        item.sourceBreakdown[sourceType] = (item.sourceBreakdown[sourceType] || 0) + 1;
-        item.sources[sourcePlatform] = (item.sources[sourcePlatform] || 0) + 1;
+  focusAdmins.forEach((admin) => {
+    map.set(admin, {
+      adminName: admin,
+      totalLeads: 0,
+      sentToSales: 0,
+      purchased: 0,
+      consulted: 0,
+      closed: 0,
+      today: 0,
+      target: safeNumber(targetConfig?.[admin], 0),
+      remaining: 0,
+      dailyMap: {},
+      recipients: {},
+      todayRecipients: {},
+      sources: { FB: 0, IG: 0, LINE: 0, TikTok: 0, Other: 0 },
+      sourceBreakdown: createEmptyLeadSourceBreakdown(),
+      rows: []
+    });
+  });
 
-        if (dayKey === activeTodayKey) {
-          item.today += 1;
-          item.todayRecipients[recipient] = (item.todayRecipients[recipient] || 0) + 1;
-        }
-        if (isClosedLeadStatus(row.status)) {
-          item.purchased += 1;
-          item.consulted += 1;
-          item.closed += 1;
-        }
-      });
+  focusRows.forEach((row) => {
+    const admin = normalizeAdminNameForFocus(row.owner || row.addedBy);
 
-      return Array.from(map.values()).map((item) => {
-        const best = Object.entries(item.dailyMap).sort((a, b) => b[1] - a[1])[0];
-        const topRecipient = topEntries(item.recipients, 1)[0] || ['-', 0];
-        const topTodayRecipient = topEntries(item.todayRecipients, 1)[0] || ['-', 0];
-        const cr = item.totalLeads > 0 ? Math.round((item.closed / item.totalLeads) * 100) : 0;
-        return {
-          ...item,
-          cr,
-          remaining: Math.max(safeNumber(item.target) - safeNumber(item.totalLeads), 0),
-          bestDayLabel: best ? compactDateLabel(best[0]) : '-',
-          bestDayCount: best ? best[1] : 0,
-          activeTodayKey,
-          activeTodayLabel: compactDateLabel(activeTodayKey),
-          todayModeLabel: 'Latest sheet date',
-          topRecipientName: topRecipient[0],
-          topRecipientCount: topRecipient[1],
-          topTodayRecipientName: topTodayRecipient[0],
-          topTodayRecipientCount: topTodayRecipient[1],
-          topRecipients: topEntries(item.recipients, 4),
-          topTodayRecipients: topEntries(item.todayRecipients, 3)
-        };
-      }).sort((a, b) => FOCUS_ADMINS.indexOf(a.adminName) - FOCUS_ADMINS.indexOf(b.adminName));
+    if (!map.has(admin)) return;
+
+    const item = map.get(admin);
+    const dayKey = row.dateKey || toDateKey(parseSheetDate(row.dateLabel || row.date));
+    const recipient =
+      row.recipient ||
+      extractRecipientFromCard(row.card || row.name || row.inboxName);
+
+    const sourceType = detectLeadSource(
+      row,
+      row.sourceType || row.sourceText || 'organic_other'
+    );
+
+    const sourcePlatform = getLeadSourcePlatform(sourceType);
+
+    item.totalLeads += 1;
+    item.sentToSales += 1;
+    item.rows.push(row);
+
+    item.dailyMap[dayKey] = (item.dailyMap[dayKey] || 0) + 1;
+    item.recipients[recipient] = (item.recipients[recipient] || 0) + 1;
+    item.sourceBreakdown[sourceType] =
+      (item.sourceBreakdown[sourceType] || 0) + 1;
+    item.sources[sourcePlatform] =
+      (item.sources[sourcePlatform] || 0) + 1;
+
+    if (dayKey === activeTodayKey) {
+      item.today += 1;
+      item.todayRecipients[recipient] =
+        (item.todayRecipients[recipient] || 0) + 1;
     }
+
+    if (isClosedLeadStatus(row.status)) {
+      item.purchased += 1;
+      item.consulted += 1;
+      item.closed += 1;
+    }
+  });
+
+  return Array.from(map.values())
+    .map((item) => {
+      const best = Object.entries(item.dailyMap)
+        .sort((a, b) => b[1] - a[1])[0];
+
+      const topRecipient =
+        topEntries(item.recipients, 1)[0] || ['-', 0];
+
+      const topTodayRecipient =
+        topEntries(item.todayRecipients, 1)[0] || ['-', 0];
+
+      const cr =
+        item.totalLeads > 0
+          ? Math.round((item.closed / item.totalLeads) * 100)
+          : 0;
+
+      return {
+        ...item,
+        cr,
+        remaining: Math.max(
+          safeNumber(item.target) - safeNumber(item.totalLeads),
+          0
+        ),
+        bestDayLabel: best ? compactDateLabel(best[0]) : '-',
+        bestDayCount: best ? best[1] : 0,
+        activeTodayKey,
+        activeTodayLabel: compactDateLabel(activeTodayKey),
+        todayModeLabel: 'Latest sheet date',
+        topRecipientName: topRecipient[0],
+        topRecipientCount: topRecipient[1],
+        topTodayRecipientName: topTodayRecipient[0],
+        topTodayRecipientCount: topTodayRecipient[1],
+        topRecipients: topEntries(item.recipients, 4),
+        topTodayRecipients: topEntries(item.todayRecipients, 3)
+      };
+    })
+    .sort(
+      (a, b) =>
+        focusAdmins.indexOf(a.adminName) -
+        focusAdmins.indexOf(b.adminName)
+    );
+}
 
     function buildStatuses(rows) {
       const statuses = {};
@@ -7441,20 +7704,47 @@ function getTodayLeadCount(item, monthData) {
       if (payload && payload.months) return payload;
 
       const requestedMonthKey = String(payload?.__requestedMonthKey || '').trim();
-      const sheets = payload?.sheets || {};
-      const pancakeRaw = Array.isArray(sheets[SHEET_PANCAKE_NAME]) ? sheets[SHEET_PANCAKE_NAME] : [];
-      const crmRaw = Array.isArray(sheets[SHEET_CRM_NAME]) ? sheets[SHEET_CRM_NAME] : [];
+const sheets = payload?.sheets || {};
+
+console.log('DEBUG SHEET KEYS:', Object.keys(sheets));
+console.log('DEBUG API:', payload?.debug);
+console.log('DEBUG API ERROR:', payload?.error);
+
+const pancakeSheetKey = Object.keys(sheets).find(
+  key => key.trim().toLowerCase() === '3. data lead pancake'
+);
+
+console.log('DEBUG PANCAKE KEY:', pancakeSheetKey);
+console.log('DEBUG PANCAKE VALUE:', sheets[pancakeSheetKey]);
+console.log('DEBUG PANCAKE VALUE TYPE:', typeof sheets[pancakeSheetKey]);
+
+const pancakeRaw = pancakeSheetKey && Array.isArray(sheets[pancakeSheetKey])
+  ? sheets[pancakeSheetKey]
+  : [];
+
+const crmRaw = Array.isArray(sheets[SHEET_CRM_NAME])
+  ? sheets[SHEET_CRM_NAME]
+  : [];
       const pancakeRows = pancakeRaw.map(normalizePancakeLead).filter((r) => r.owner && r.owner !== 'Unknown');
       const crmRows = crmRaw.map(normalizeCrmLead);
+      console.log('DEBUG pancakeRaw:', pancakeRaw.length);
+console.log('DEBUG pancakeRows:', pancakeRows.length);
+console.log('DEBUG first raw:', pancakeRaw[0]);
+console.log('DEBUG first normalized:', pancakeRows[0]);
       const recentRowsSource = crmRows.length ? crmRows : pancakeRows;
       const monthsMap = new Map();
-
       pancakeRows.forEach((row) => {
-        const date = parseSheetDate(row.dateLabel || row.date);
-        const key = toMonthKey(date);
-        if (!monthsMap.has(key)) monthsMap.set(key, []);
-        monthsMap.get(key).push(row);
-      });
+  const date = parseSheetDate(row.dateLabel || row.date);
+  const key = toMonthKey(date);
+
+  if (!monthsMap.has(key)) monthsMap.set(key, []);
+  monthsMap.get(key).push(row);
+});
+
+console.log(
+  'DEBUG months:',
+  [...monthsMap.entries()].map(([key, rows]) => [key, rows.length])
+);
 
       if (!monthsMap.size) {
         monthsMap.set(requestedMonthKey || toMonthKey(new Date()), []);
@@ -7482,7 +7772,11 @@ function getTodayLeadCount(item, monthData) {
           key: monthKey,
           label: toMonthLabel(monthKey),
           targetConfig: { All: monthLeadTarget, overallLeadTarget: monthLeadTarget },
-          adminPerformance: buildAdminPerformanceFromPancakeRows(rows),
+          adminPerformance: buildAdminPerformanceFromPancakeRows(
+  rows,
+  {},
+  getFocusAdminsForMonth(monthKey)
+),
           views,
           allLeads: rows,
           leads: rows,
@@ -7505,7 +7799,10 @@ function getTodayLeadCount(item, monthData) {
       }
 
       const monthOrder = Object.keys(months).sort().reverse();
-      const admins = ['All', ...FOCUS_ADMINS];
+      const admins = [
+  'All',
+  ...getFocusAdminsForMonth(requestedMonthKey || DEFAULT_MONTH_KEY)
+];
 
       return {
         lastUpdated: payload?.updatedAt || new Date().toISOString(),
@@ -7579,12 +7876,75 @@ function renderRecentLeads(rows) {
       renderStatusGrid(view.statuses || {}, view.summary?.collected || 0);
       renderRecentLeads(view.recentLeads || []);
     }
+let dashboardRequestSeq = 0;
+
+function showDashboardLoading(monthKey) {
+  const existing = document.getElementById('dashboardLoadingOverlay');
+
+  if (existing) {
+    existing.remove();
+  }
+
+  const monthLabel = (() => {
+    if (!monthKey) return 'dashboard';
+
+    const [year, month] = monthKey.split('-');
+
+    const months = [
+      'January', 'February', 'March', 'April',
+      'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
+    ];
+
+    return `${months[Number(month) - 1] || ''} ${year}`.trim();
+  })();
+
+  const overlay = document.createElement('div');
+
+  overlay.id = 'dashboardLoadingOverlay';
+  overlay.className = 'dashboard-loading-overlay';
+
+  overlay.innerHTML = `
+    <div class="dashboard-loading-card">
+      <div class="dashboard-loading-spinner"></div>
+
+      <div class="dashboard-loading-content">
+        <strong>Loading ${monthLabel}</strong>
+        <span>Fetching the latest dashboard data...</span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+}
+
+function hideDashboardLoading() {
+  const overlay = document.getElementById('dashboardLoadingOverlay');
+
+  if (!overlay) return;
+
+  overlay.classList.add('is-hiding');
+
+  setTimeout(() => {
+    overlay.remove();
+  }, 250);
+}
 
  async function loadDashboardData(options = {}) {
+
+   const requestSeq = ++dashboardRequestSeq;
+   const requestedMonthKey =
+  options.monthKey ||
+  monthSelect.value ||
+  DEFAULT_MONTH_KEY;
+
   const silent = Boolean(options.silent);
   const force = Boolean(options.force);
 
   if (isLoading && !force) return;
+  if (!silent) {
+  showDashboardLoading(requestedMonthKey);
+}
 
   if (!API_URL || API_URL.includes('PASTE_URL_HERE')) {
     showToast(
@@ -7619,10 +7979,14 @@ function renderRecentLeads(rows) {
 
   try {
    const requestedMonthKey =
-  monthSelect.value &&
-  MONTH_SHEET_IDS[monthSelect.value]
-    ? monthSelect.value
-    : DEFAULT_MONTH_KEY;
+  !hasLoadedOnce
+    ? DEFAULT_MONTH_KEY
+    : (
+        monthSelect.value &&
+        MONTH_SHEET_IDS[monthSelect.value]
+          ? monthSelect.value
+          : DEFAULT_MONTH_KEY
+      );
 
 const requestedSheetId =
   MONTH_SHEET_IDS[requestedMonthKey];
@@ -7643,6 +8007,8 @@ const queryParams = new URLSearchParams({
 const requestUrl =
   `${API_URL}?${queryParams.toString()}`;
 
+  
+
 console.log(
   'Loading dashboard:',
   requestedMonthKey,
@@ -7660,6 +8026,11 @@ console.log(
     }
 
     const textData = await res.text();
+    // ถ้ามี request ใหม่เกิดขึ้นแล้ว ให้ request เก่าหยุดตรงนี้
+if (requestSeq !== dashboardRequestSeq) {
+  console.log('Ignore stale dashboard response:', requestSeq);
+  return;
+}
 
     const trimmed = textData.trim();
 
@@ -7671,6 +8042,17 @@ console.log(
 
     try {
       newData = JSON.parse(cleanJson);
+      console.log('=== API RESPONSE CHECK ===');
+  console.log('Requested month:', requestedMonthKey);
+  console.log('Requested sheetId:', requestedSheetId);
+  console.log('API spreadsheetId:', newData.spreadsheetId);
+  console.log('API monthKey:', newData.__requestedMonthKey);
+  console.log('API spreadsheetName:', newData.debug?.spreadsheetName);
+  console.log('API recordCount:', newData.debug?.recordCount);
+  console.log(
+    'API first record:',
+    newData.sheets?.['3. data lead pancake']?.[0]
+  );
     } catch (parseError) {
       console.error('API response:', textData);
       throw new Error('Apps Script did not return valid JSON');
@@ -7729,6 +8111,21 @@ console.log(
     renderDashboard(monthSelect.value);
     hasLoadedOnce = true;
 
+    // แจ้งเตือนเมื่อโหลดข้อมูลสำเร็จ
+if (!silent && requestSeq === dashboardRequestSeq) {
+  console.log('SUCCESS TOAST CHECK', { silent, requestSeq, dashboardRequestSeq });
+  const loadedMonth =
+    dashboardData?.months?.[monthSelect.value]?.label ||
+    monthSelect.options[monthSelect.selectedIndex]?.text ||
+    monthSelect.value;
+
+  showToast(
+    'Data Updated',
+    `${loadedMonth} dashboard loaded successfully.`,
+    'success'
+  );
+}
+
   } catch (error) {
     console.error('Dashboard load error:', error);
 
@@ -7756,8 +8153,14 @@ console.log(
   } finally {
     clearTimeout(timeoutId);
 
+    if (requestSeq === dashboardRequestSeq) {
+  hideDashboardLoading();
+}
+
     isLoading = false;
 
+     // ให้เฉพาะ request ล่าสุดเท่านั้นที่เปลี่ยนสถานะหน้าเว็บ
+  if (requestSeq === dashboardRequestSeq) {
     refreshBtn.disabled = false;
     refreshBtn.classList.remove('is-loading');
 
@@ -7771,10 +8174,27 @@ console.log(
     `;
   }
 }
+}
 
-    monthSelect.addEventListener('change', (e) => {
-      renderDashboard(e.target.value);
-    });
+monthSelect.addEventListener('change', async (e) => {
+  const monthKey = e.target.value;
+
+  // อัปเดตรายชื่อ Admin ของเดือนที่เลือก
+  renderAdminOptions([
+    'All',
+    ...getFocusAdminsForMonth(monthKey)
+  ]);
+
+  // โหลดข้อมูลของเดือนใหม่
+  await loadDashboardData({
+    force: true,
+    monthKey
+  });
+
+  // ถ้าระหว่างโหลดผู้ใช้เปลี่ยนเดือนไปแล้ว
+  // ไม่ให้ request เก่าทำอะไรต่อ
+  if (monthSelect.value !== monthKey) return;
+});
 
     adminSelect.addEventListener('change', () => {
       renderDashboard(monthSelect.value);
