@@ -2623,6 +2623,7 @@ body { transition: background .28s ease, color .28s ease; }
 .toast.alert-hot .toast-icon { background:linear-gradient(135deg,#f97316,#ef4444); }
 .toast.alert-good .toast-icon { background:linear-gradient(135deg,#16a34a,#22c55e); }
 .toast.alert-info .toast-icon { background:linear-gradient(135deg,#2563eb,#60a5fa); }
+.toast.alert-error .toast-icon { background:linear-gradient(135deg,#dc2626,#ef4444); }
 body.dark-mode { --bg:#0b1220; --surface:rgba(15,23,42,.88); --surface-strong:#111827; --text:#eaf2ff; --muted:#9fb0c9; --line:rgba(148,163,184,.22); --shadow:0 20px 55px rgba(0,0,0,.28); background:radial-gradient(circle at top right,rgba(59,130,246,.22) 0%,transparent 30%),radial-gradient(circle at top left,rgba(139,92,246,.16) 0%,transparent 28%),linear-gradient(180deg,#0f172a 0%,#0b1220 100%); color:var(--text); }
 body.dark-mode .sidebar { background:rgba(15,23,42,.72); border-right-color:rgba(148,163,184,.18); }
 body.dark-mode .card, body.dark-mode .kpi-card, body.dark-mode .admin-card, body.dark-mode .status-list-card, body.dark-mode .table-wrap, body.dark-mode .control-box, body.dark-mode .sound-toggle, body.dark-mode .sidebar-source, body.dark-mode .source-chip { background:linear-gradient(180deg,rgba(30,41,59,.94) 0%,rgba(15,23,42,.94) 100%) !important; border-color:rgba(148,163,184,.20) !important; color:var(--text) !important; }
@@ -5803,7 +5804,7 @@ body, button, select, input, textarea {
     showToast(toastMsg, 'error');
 }
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbyd-Xw-gIHfutLm4vQBZfILI_F-h4TyNgPLDbODr7FPqcwULTtDwjA50VS29B8b853ohA/exec';// ======================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbx2GJYm47EI53aKt6E1uQMiETEOuSZq6Ylm-Kr-uqgwH3IhZOYdS-o5DYdX2KQr0RoKzg/exec';
 // MONTH CONFIG
 // ======================================================
 
@@ -7706,17 +7707,13 @@ function getFocusAdminsForMonth(monthKey) {
       const requestedMonthKey = String(payload?.__requestedMonthKey || '').trim();
 const sheets = payload?.sheets || {};
 
-console.log('DEBUG SHEET KEYS:', Object.keys(sheets));
-console.log('DEBUG API:', payload?.debug);
-console.log('DEBUG API ERROR:', payload?.error);
+
 
 const pancakeSheetKey = Object.keys(sheets).find(
   key => key.trim().toLowerCase() === '3. data lead pancake'
 );
 
-console.log('DEBUG PANCAKE KEY:', pancakeSheetKey);
-console.log('DEBUG PANCAKE VALUE:', sheets[pancakeSheetKey]);
-console.log('DEBUG PANCAKE VALUE TYPE:', typeof sheets[pancakeSheetKey]);
+
 
 const pancakeRaw = pancakeSheetKey && Array.isArray(sheets[pancakeSheetKey])
   ? sheets[pancakeSheetKey]
@@ -7727,13 +7724,11 @@ const crmRaw = Array.isArray(sheets[SHEET_CRM_NAME])
   : [];
       const pancakeRows = pancakeRaw.map(normalizePancakeLead).filter((r) => r.owner && r.owner !== 'Unknown');
       const crmRows = crmRaw.map(normalizeCrmLead);
-      console.log('DEBUG pancakeRaw:', pancakeRaw.length);
-console.log('DEBUG pancakeRows:', pancakeRows.length);
-console.log('DEBUG first raw:', pancakeRaw[0]);
-console.log('DEBUG first normalized:', pancakeRows[0]);
+      
       const recentRowsSource = crmRows.length ? crmRows : pancakeRows;
       const monthsMap = new Map();
       pancakeRows.forEach((row) => {
+        
   const date = parseSheetDate(row.dateLabel || row.date);
   const key = toMonthKey(date);
 
@@ -7741,9 +7736,15 @@ console.log('DEBUG first normalized:', pancakeRows[0]);
   monthsMap.get(key).push(row);
 });
 
+console.log('=== MONTH DEBUG ===');
+console.log('requestedMonthKey:', requestedMonthKey);
+console.log('pancakeRaw:', pancakeRaw.length);
+console.log('pancakeRows:', pancakeRows.length);
 console.log(
-  'DEBUG months:',
-  [...monthsMap.entries()].map(([key, rows]) => [key, rows.length])
+  'monthsMap:',
+  Object.fromEntries(
+    Array.from(monthsMap.entries()).map(([key, rows]) => [key, rows.length])
+  )
 );
 
       if (!monthsMap.size) {
@@ -7931,8 +7932,6 @@ function hideDashboardLoading() {
 }
 
  async function loadDashboardData(options = {}) {
-
-   const requestSeq = ++dashboardRequestSeq;
    const requestedMonthKey =
   options.monthKey ||
   monthSelect.value ||
@@ -7942,6 +7941,9 @@ function hideDashboardLoading() {
   const force = Boolean(options.force);
 
   if (isLoading && !force) return;
+
+  const requestSeq = ++dashboardRequestSeq;
+
   if (!silent) {
   showDashboardLoading(requestedMonthKey);
 }
@@ -7972,10 +7974,10 @@ function hideDashboardLoading() {
 
   const controller = new AbortController();
 
-  // เพิ่มจาก 12 วินาทีเป็น 60 วินาที
+  // 180 วินาที
   const timeoutId = setTimeout(() => {
     controller.abort();
-  }, 60000);
+  }, 180000);
 
   try {
    const requestedMonthKey =
@@ -8000,8 +8002,7 @@ if (!requestedSheetId) {
 const queryParams = new URLSearchParams({
   sheetId: requestedSheetId,
   sheetName: '3. data lead pancake',
-  monthKey: requestedMonthKey,
-  _: String(Date.now())
+  monthKey: requestedMonthKey
 });
 
 const requestUrl =
@@ -8027,8 +8028,18 @@ console.log(
 
     const textData = await res.text();
     // ถ้ามี request ใหม่เกิดขึ้นแล้ว ให้ request เก่าหยุดตรงนี้
-if (requestSeq !== dashboardRequestSeq) {
-  console.log('Ignore stale dashboard response:', requestSeq);
+if (
+  requestSeq !== dashboardRequestSeq ||
+  monthSelect.value !== requestedMonthKey
+) {
+  console.log(
+    'Ignore stale dashboard response:',
+    requestedMonthKey,
+    'current:',
+    monthSelect.value,
+    'seq:',
+    requestSeq
+  );
   return;
 }
 
@@ -8047,12 +8058,7 @@ if (requestSeq !== dashboardRequestSeq) {
   console.log('Requested sheetId:', requestedSheetId);
   console.log('API spreadsheetId:', newData.spreadsheetId);
   console.log('API monthKey:', newData.__requestedMonthKey);
-  console.log('API spreadsheetName:', newData.debug?.spreadsheetName);
-  console.log('API recordCount:', newData.debug?.recordCount);
-  console.log(
-    'API first record:',
-    newData.sheets?.['3. data lead pancake']?.[0]
-  );
+ 
     } catch (parseError) {
       console.error('API response:', textData);
       throw new Error('Apps Script did not return valid JSON');
@@ -8067,6 +8073,20 @@ if (requestSeq !== dashboardRequestSeq) {
     ) {
       throw new Error('Invalid dashboard data');
     }
+
+// ป้องกัน request เดือนเก่ามาทับเดือนที่ผู้ใช้กำลังดู
+if (
+  requestSeq !== dashboardRequestSeq ||
+  monthSelect.value !== requestedMonthKey
+) {
+  console.log(
+    'STOP stale data before dashboardData assignment:',
+    requestedMonthKey,
+    'current:',
+    monthSelect.value
+  );
+  return;
+}
 
     checkNewLeadNotification(newData);
     dashboardData = newData;
@@ -8108,12 +8128,12 @@ if (requestSeq !== dashboardRequestSeq) {
       adminSelect.value = currentAdmin;
     }
 
-    renderDashboard(monthSelect.value);
+    renderDashboard(requestedMonthKey);
     hasLoadedOnce = true;
 
     // แจ้งเตือนเมื่อโหลดข้อมูลสำเร็จ
 if (!silent && requestSeq === dashboardRequestSeq) {
-  console.log('SUCCESS TOAST CHECK', { silent, requestSeq, dashboardRequestSeq });
+  
   const loadedMonth =
     dashboardData?.months?.[monthSelect.value]?.label ||
     monthSelect.options[monthSelect.selectedIndex]?.text ||
@@ -8147,7 +8167,7 @@ if (!silent && requestSeq === dashboardRequestSeq) {
     }
 
     if (!silent) {
-      showToast('Data Load Failed', msg, 'info');
+      showToast('Data Load Failed', msg, 'error');
     }
 
   } finally {
@@ -8317,11 +8337,10 @@ monthSelect.addEventListener('change', async (e) => {
     updateSoundButton();
     setupPwaInstall();
 
-    // Show July targets immediately, even before Google Sheets finishes loading.
-    renderDashboardFallback('July 2026 ready. Waiting for Google Sheets data...');
+    // Show current default month while waiting for Google Sheets.
+renderDashboardFallback('September 2026 ready. Waiting for Google Sheets data...');
 
     loadDashboardData({ silent: false });
-    setInterval(() => loadDashboardData({ silent: true }), 5000);
 
   
     const leadSourcePopover = document.getElementById('leadSourcePopover');
