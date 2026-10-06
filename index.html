@@ -221,13 +221,37 @@
   padding: 0 10px; 
 }
 
- .topbar {
+.topbar {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  margin-bottom: 26px; 
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.headline {
+  width: 100%;
+}
+
+.controls {
+  width: 100%;
+}
+
+.control-box {
+  flex: 0 0 220px;
+  min-width: 220px;
+}
+
+.search-box {
+  flex: 1 1 360px;
+  min-width: 300px;
+  max-width: 480px;
+}
+
+.refresh-btn,
+.sound-toggle,
+.theme-toggle {
+  flex: 0 0 auto;
 }
 
     .headline h2 {
@@ -251,7 +275,36 @@
       width: 16px;
       height: 16px;
     }
+.goal-status-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  gap: 6px;
+  margin-top: 9px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  border: 1px solid transparent;
+  transition: all .2s ease;
+}
 
+.goal-status-badge[hidden] {
+  display: none !important;
+}
+
+.goal-status-badge.is-good {
+  color: #128347;
+  background: rgba(34, 197, 94, .12);
+  border-color: rgba(34, 197, 94, .20);
+}
+
+.goal-status-badge.is-warn {
+  color: #b86a00;
+  background: rgba(245, 158, 11, .13);
+  border-color: rgba(245, 158, 11, .22);
+}
 .controls {
   display: flex;
   gap: 12px;
@@ -283,6 +336,164 @@
       color: var(--blue);
       flex: 0 0 auto;
     }
+    .search-box {
+  height: 50px;
+  min-width: 160px;
+width: 190px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  background: rgba(255, 255, 255, .92);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  color: var(--muted);
+}
+
+.search-box svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  color: var(--blue);
+}
+
+.search-box input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+}
+
+.search-box input::placeholder {
+  color: #94a3b8;
+}
+
+.search-box:focus-within {
+  border-color: rgba(37, 99, 235, .35);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .08), var(--shadow);
+}
+.search-box {
+  position: relative;
+}
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  z-index: 9999;
+
+  max-height: 360px;
+  overflow-y: auto;
+
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+
+  padding: 8px;
+  min-width: 320px;
+}
+.search-result-item {
+  padding: 12px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.search-result-item:hover {
+  background: #f3f7ff;
+  transform: translateX(2px);
+}
+
+.search-result-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f2f52;
+  margin-bottom: 4px;
+}
+
+.search-result-meta {
+  font-size: 12px;
+  color: #7b8ca8;
+  line-height: 1.4;
+}
+
+.search-result-item + .search-result-item {
+  border-top: 1px solid rgba(226, 232, 240, 0.75);
+}
+.search-result-item {
+  padding: 13px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background .18s ease, transform .18s ease;
+}
+
+.search-result-item:hover {
+  background: #eef5ff;
+  transform: translateX(3px);
+}
+
+.search-result-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #16375b;
+}
+
+.search-result-meta {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #7b8da8;
+}
+
+.search-results[hidden] {
+  display: none !important;
+}
+
+.search-result-item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+
+.search-result-item:hover {
+  background: rgba(37, 99, 235, .08);
+}
+
+.search-result-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f2746;
+}
+
+.search-result-meta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: #7c8da6;
+}
+.search-result-item {
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.search-result-item:hover {
+  background: #f4f8ff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, .08);
+}
+
+.search-result-item:active {
+  transform: translateY(0);
+}
+.search-result-item:hover .search-result-name {
+  color: #2563eb;
+}
 
     select, button {
       border: none;
@@ -1071,19 +1282,22 @@
 .main { padding: 16px 18px; }
 .page-shell { max-width: 1320px; padding: 0 6px; }
 .topbar {
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 18px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 14px 18px;
   margin-bottom: 18px;
 }
 .headline { flex: 1 1 auto; min-width: 260px; }
 .headline h2 { font-size: 25px; }
 .headline-meta { margin-top: 7px; font-size: 13px; }
 .controls {
-  flex: 0 0 auto;
-  flex-wrap: nowrap;
+  flex: 1 1 700px;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 .control-box {
   height: 46px;
@@ -5503,6 +5717,179 @@ body, button, select, input, textarea {
   }
 }
 
+.lead-modal[hidden] {
+  display: none !important;
+}
+
+.lead-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.lead-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(5px);
+}
+
+.lead-modal-card {
+  position: relative;
+  z-index: 1;
+  width: min(460px, 92vw);
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 24px;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.24);
+  padding: 28px;
+}
+
+.lead-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.lead-modal-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: #eef5ff;
+  font-size: 24px;
+  margin-bottom: 14px;
+}
+
+.lead-modal-label {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #2563eb;
+}
+
+.lead-modal-card h3 {
+  margin: 6px 0 20px;
+  font-size: 24px;
+  color: #0f2f52;
+}
+
+.lead-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.lead-modal-item {
+  padding: 14px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e8eef6;
+}
+
+.lead-modal-item span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 5px;
+}
+
+.lead-modal-item strong {
+  display: block;
+  font-size: 14px;
+  color: #183b63;
+  word-break: break-word;
+}
+.search-highlight {
+  background: #fff3b0;
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 4px;
+  font-weight: 800;
+}
+.controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.search-box {
+  flex: 1 1 320px;
+  min-width: 280px;
+  max-width: 420px;
+}
+
+.control-box {
+  flex: 0 0 165px;
+  min-width: 165px;
+}
+
+.refresh-btn,
+.sound-toggle,
+.theme-toggle {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* ===== FIX TOP AREA GAP ===== */
+
+.topbar {
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 0 18px 0 !important;
+  padding: 0 !important;
+}
+
+.headline {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 0 14px 0 !important;
+  padding: 0 !important;
+}
+
+.controls {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-wrap: nowrap !important;
+
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#recentLeadsBody tr {
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+#recentLeadsBody tr:hover {
+  background: rgba(37, 99, 235, 0.045);
+}
 /* CSS จบตรงนี้ */
 
 </style>
@@ -5574,21 +5961,41 @@ body, button, select, input, textarea {
           <div class="headline">
             <h2 id="pageTitle">Monthly Lead Dashboard · August 2026 · All Team</h2>
             <div class="headline-meta" id="lastUpdatedText">
+              
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 3v6h6"></path></svg>
               <span>August 2026 ready. Waiting for Google Sheets data...</span>
             </div>
+            <div id="goalStatusBadge" class="goal-status-badge" hidden></div>
+
           </div>
 
      <div class="controls">
+
+      <div class="search-box">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="11" cy="11" r="7"></circle>
+    <path d="m20 20-3.5-3.5"></path>
+  </svg>
+
+  <input
+    id="leadSearchInput"
+    type="search"
+    placeholder="Search leads..."
+    autocomplete="off"
+  />
+  <div id="leadSearchResults" class="search-results" hidden></div>
+</div>
+
   <div class="control-box">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg>
 <select id="monthSelect">
-  <option value="2026-09" selected>September 2026</option>
-  <option value="2026-08">August 2026</option>
-  <option value="2026-07">July 2026</option>
-  <option value="2026-06">June 2026</option>
+  <option value="2026-10" selected>Oct 2026</option>
+  <option value="2026-09">Sep 2026</option>
+  <option value="2026-08">Aug 2026</option>
+  <option value="2026-07">Jul 2026</option>
+  <option value="2026-06">Jun 2026</option>
   <option value="2026-05">May 2026</option>
-  <option value="2026-04">April 2026</option>
+  <option value="2026-04">Apr 2026</option>
 </select>
   </div>
 
@@ -5596,6 +6003,7 @@ body, button, select, input, textarea {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg>
     <select id="adminSelect"><option value="All" selected>All Team</option><option value="มายมิ้น">มายมิ้น</option><option value="น้ำทิพ">น้ำทิพ</option><option value="อ้น">อ้น</option></select>
   </div>
+
 
   <button class="refresh-btn" id="refreshBtn" type="button">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 3v6h-6"></path></svg>
@@ -5797,6 +6205,43 @@ body, button, select, input, textarea {
     </main>
   </div>
 
+   <div id="leadDetailModal" class="lead-modal" hidden>
+  <div class="lead-modal-backdrop"></div>
+
+  <div class="lead-modal-card">
+    <button id="leadModalClose" class="lead-modal-close" type="button">×</button>
+
+    <div class="lead-modal-icon">👤</div>
+
+    <div class="lead-modal-label">Lead Detail</div>
+
+    <h3 id="leadModalName">-</h3>
+
+    <div class="lead-modal-grid">
+      <div class="lead-modal-item">
+        <span>Phone</span>
+        <strong id="leadModalPhone">-</strong>
+      </div>
+
+      <div class="lead-modal-item">
+        <span>Admin</span>
+        <strong id="leadModalOwner">-</strong>
+      </div>
+
+      <div class="lead-modal-item">
+        <span>Status</span>
+        <strong id="leadModalStatus">-</strong>
+      </div>
+
+      <div class="lead-modal-item">
+        <span>Date</span>
+        <strong id="leadModalDate">-</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script>
     function renderDashboardFallback(msg) {
     console.warn("Dashboard fallback triggered:", msg);
@@ -5809,12 +6254,15 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbx2GJYm47EI53aKt6E1uQMi
 // ======================================================
 
 // เดือนที่เปิด Dashboard แล้วให้แสดงเป็นค่าเริ่มต้น
-// Current default: September 2026 
-const DEFAULT_MONTH_KEY = '2026-09';
-
+// Current default: October 2026 
+const DEFAULT_MONTH_KEY = '2026-10';
 // Spreadsheet ID ของแต่ละเดือน
 // สำคัญ: ห้ามลบ ID เดือนเก่า เพราะใช้สำหรับเลือกดูข้อมูลย้อนหลัง
 const MONTH_SHEET_IDS = {
+
+    // October 2026
+  // Inbox Report - 2610
+  '2026-10': '1rly6zihIadHcHqZkFnk9RAPtwdM-ueMmjlcnyxb_fzA',
 
     // September 2026
   // Inbox Report - 2609
@@ -5849,6 +6297,9 @@ const DEFAULT_TARGET = 1000;
 
 const MONTH_LEAD_TARGETS = {
 
+  // October 2026
+  '2026-10': 930,
+
   // September 2026
   '2026-09': 876,
 
@@ -5873,6 +6324,16 @@ const MONTH_LEAD_TARGETS = {
 const OVERVIEW_GOALS = { daily: 32, cr: 11, inboxMonthly: 1000 };
 
 const MONTH_OVERVIEW_GOALS = {
+
+  // October 2026
+  '2026-10': {
+    label1: 'DAILY',
+    value1: 30,
+    label2: 'CR',
+    value2: '13%',
+    label3: 'INBOX / MONTH',
+    value3: 7154
+  },
 
   // September 2026
   '2026-09': {
@@ -5971,6 +6432,17 @@ const MONTH_OVERVIEW_GOALS = {
     const monthSelect = document.getElementById('monthSelect');
     const adminSelect = document.getElementById('adminSelect');
     const refreshBtn = document.getElementById('refreshBtn');
+    const leadSearchInput = document.getElementById('leadSearchInput');
+    const leadSearchResults = document.getElementById('leadSearchResults');
+
+    const leadDetailModal = document.getElementById('leadDetailModal');
+const leadModalClose = document.getElementById('leadModalClose');
+const leadModalName = document.getElementById('leadModalName');
+const leadModalPhone = document.getElementById('leadModalPhone');
+const leadModalOwner = document.getElementById('leadModalOwner');
+const leadModalStatus = document.getElementById('leadModalStatus');
+const leadModalDate = document.getElementById('leadModalDate');
+
     const toastWrap = document.getElementById('toastWrap');
     const soundToggle = document.getElementById('soundToggle');
     const themeToggle = document.getElementById('themeToggle');
@@ -5983,6 +6455,214 @@ const MONTH_OVERVIEW_GOALS = {
       if (value === null || value === undefined || String(value).trim() === '') return fallback;
       return String(value);
     }
+
+    function highlightMatch(text, query) {
+  const safe = String(text ?? '');
+  const keyword = String(query ?? '').trim();
+
+  if (!keyword) return safe;
+
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escaped})`, 'gi');
+
+  return safe.replace(regex, '<mark class="search-highlight">$1</mark>');
+}
+ function openLeadDetail(row) {
+
+  if (!leadDetailModal || !row) return;
+
+  leadModalName.textContent =
+    safeText(row?.name, 'Unknown Lead');
+
+  leadModalPhone.textContent =
+    safeText(row?.phone, 'No phone');
+
+  leadModalOwner.textContent =
+    safeText(row?.owner || row?.adminName, 'No admin');
+
+  leadModalStatus.textContent =
+    safeText(row?.status, 'No status');
+
+  leadModalDate.textContent =
+    safeText(row?.dateLabel || row?.date || row?.dateText, '-');
+
+  leadDetailModal.hidden = false;
+  leadDetailModal.removeAttribute('hidden');
+  leadDetailModal.style.display = 'flex';
+}
+
+function closeLeadDetail() {
+  if (!leadDetailModal) return;
+
+  leadDetailModal.hidden = true;
+  leadDetailModal.style.display = 'none';
+}
+
+leadModalClose?.addEventListener('click', closeLeadDetail);
+
+leadDetailModal?.addEventListener('click', (event) => {
+  if (
+    event.target === leadDetailModal ||
+    event.target.classList.contains('lead-modal-backdrop')
+  ) {
+    closeLeadDetail();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !leadDetailModal?.hidden) {
+    closeLeadDetail();
+  }
+});
+
+function getSearchableLeadRows() {
+  const monthKey = monthSelect.value || DEFAULT_MONTH_KEY;
+  const monthData = dashboardData?.months?.[monthKey];
+
+  if (!monthData) return [];
+
+  return Array.isArray(monthData.rows)
+    ? monthData.rows
+    : Array.isArray(monthData.allLeads)
+      ? monthData.allLeads
+      : Array.isArray(monthData.leads)
+        ? monthData.leads
+        : [];
+}
+
+function searchLeads(query) {
+  const keyword = String(query || '').trim().toLowerCase();
+
+  if (!keyword) return [];
+
+  const rows = getSearchableLeadRows();
+
+  // สำหรับค้นหาเบอร์โทร
+  const keywordDigits = keyword.replace(/\D/g, '');
+
+  // รองรับ 08xxxxxxxx / 668xxxxxxxx / +668xxxxxxxx
+  const phoneVariants = new Set([keywordDigits]);
+
+  if (keywordDigits.startsWith('0')) {
+    phoneVariants.add('66' + keywordDigits.slice(1));
+  }
+
+  if (keywordDigits.startsWith('66')) {
+    phoneVariants.add('0' + keywordDigits.slice(2));
+  }
+
+  return rows.filter((row) => {
+    const searchableText = [
+      row?.no,
+      row?.name,
+      row?.phone,
+      row?.inboxName,
+      row?.owner,
+      row?.addedBy,
+      row?.adminName,
+      row?.adminTab,
+      row?.status,
+      row?.sourceText,
+      row?.sourceType,
+      row?.card,
+      row?.recipient
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    // ค้นข้อความทั่วไป
+    if (searchableText.includes(keyword)) {
+      return true;
+    }
+
+    // ค้นเบอร์โทรแบบไม่สน + - เว้นวรรค
+    if (keywordDigits) {
+      const rowPhoneDigits = String(row?.phone || '').replace(/\D/g, '');
+
+      for (const variant of phoneVariants) {
+        if (variant && rowPhoneDigits.includes(variant)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  });
+}
+
+function renderLeadSearchResults(query) {
+  if (!leadSearchResults) return;
+
+  const keyword = String(query || '').trim();
+
+  if (!keyword) {
+    leadSearchResults.innerHTML = '';
+    leadSearchResults.hidden = true;
+    return;
+  }
+
+  const results = searchLeads(keyword).slice(0, 8);
+
+  if (!results.length) {
+    leadSearchResults.innerHTML = `
+      <div class="search-result-item">
+        <div class="search-result-name">No leads found</div>
+        <div class="search-result-meta">Try another name, phone, inbox or status</div>
+      </div>
+    `;
+    leadSearchResults.hidden = false;
+    return;
+  }
+
+  leadSearchResults.innerHTML = results.map((row, index) => {
+    const name = safeText(row?.name, 'Unknown Lead');
+    const phone = safeText(row?.phone, 'No phone');
+    const owner = safeText(row?.owner || row?.adminName, 'No admin');
+    const status = safeText(row?.status, 'No status');
+    const highlightedName = highlightMatch(name, keyword);
+const highlightedPhone = highlightMatch(phone, keyword);
+const highlightedOwner = highlightMatch(owner, keyword);
+const highlightedStatus = highlightMatch(status, keyword);
+
+    return `
+      <div class="search-result-item" data-lead-index="${index}">
+       <div class="search-result-name">${highlightedName}</div>
+<div class="search-result-meta">
+  ${highlightedPhone} · ${highlightedOwner} · ${highlightedStatus}
+</div>
+      </div>
+    `;
+  }).join('');
+
+  leadSearchResults.hidden = false;
+}
+
+
+leadSearchInput?.addEventListener('input', (event) => {
+  renderLeadSearchResults(event.target.value);
+});
+
+leadSearchResults?.addEventListener('click', (event) => {
+
+  const item = event.target.closest('.search-result-item');
+  if (!item) return;
+
+  const index = Number(item.dataset.leadIndex);
+
+  if (!Number.isInteger(index)) return;
+
+  const query = leadSearchInput?.value || '';
+  const results = searchLeads(query).slice(0, 8);
+  const row = results[index];
+
+
+  if (!row) return;
+
+  openLeadDetail(row);
+  leadSearchResults.hidden = true;
+leadSearchInput.blur();
+});
 
     function safeNumber(value, fallback = 0) {
       const n = Number(value);
@@ -6310,9 +6990,15 @@ function renderMonthOptions(months) {  // เก็บเดือนที่�
     const option = document.createElement('option');
 
     option.value = key;
-    option.textContent = translateMonthLabel(
-      normalizeMonthLabel(key)
-    );
+   option.textContent = translateMonthLabel(
+  normalizeMonthLabel(key)
+).replace('October', 'Oct')
+ .replace('September', 'Sep')
+ .replace('August', 'Aug')
+ .replace('July', 'Jul')
+ .replace('June', 'Jun')
+ .replace('May', 'May')
+ .replace('April', 'Apr');
 
     if (key === currentValue) {
       option.selected = true;
@@ -6673,6 +7359,71 @@ function getTodayLeadCount(item, monthData) {
   }
 
   return todayFromRows > 0 ? todayFromRows : (directValue ?? 0);
+}
+
+function getDailySummaryData(data) {
+  const monthKey = monthSelect.value || DEFAULT_MONTH_KEY;
+  const monthData = data?.months?.[monthKey] || {};
+
+  const admins = Array.isArray(monthData?.adminPerformance)
+    ? monthData.adminPerformance
+    : [];
+
+  const today = admins.reduce(
+    (sum, item) => sum + getTodayLeadCount(item, monthData),
+    0
+  );
+
+  const dailyGoal =
+    safeNumber(MONTH_OVERVIEW_GOALS?.[monthKey]?.value1, OVERVIEW_GOALS.daily);
+
+  const remaining = Math.max(dailyGoal - today, 0);
+  const aboveGoal = Math.max(today - dailyGoal, 0);
+
+  return {
+    today,
+    dailyGoal,
+    remaining,
+    aboveGoal,
+    achieved: today >= dailyGoal
+  };
+}
+
+function showDailySummaryPopup(data) {
+  const summary = getDailySummaryData(data);
+
+  const title = summary.achieved
+    ? 'Daily Goal Achieved 🎉'
+    : 'Today’s Progress';
+
+  const message = summary.achieved
+    ? `${summary.today} leads today · +${summary.aboveGoal} above daily goal ${summary.dailyGoal}`
+    : `${summary.today} leads today · ${summary.remaining} remaining to daily goal ${summary.dailyGoal}`;
+
+  showToast(
+    title,
+    message,
+    summary.achieved ? 'success' : 'info'
+  );
+}
+
+function updateGoalStatusBadge(data) {
+  const badge = document.getElementById('goalStatusBadge');
+  if (!badge) return;
+
+  const summary = getDailySummaryData(data);
+
+  badge.classList.remove('is-good', 'is-warn');
+
+  if (summary.achieved) {
+    badge.textContent = `✓ Daily Goal Achieved · ${summary.today}/${summary.dailyGoal}`;
+    badge.classList.add('is-good');
+  } else {
+    badge.textContent = `⏳ ${summary.remaining} Leads to Daily Goal · ${summary.today}/${summary.dailyGoal}`;
+    badge.classList.add('is-warn');
+  }
+
+  badge.hidden = false;
 }
 
     function renderAdminPerformance(items, monthData) {
@@ -7224,7 +7975,8 @@ const sortedItems = [...items]
     const SHEET_PANCAKE_NAME = '3. data lead pancake ';
     const FOCUS_ADMINS = ['Aon On', 'Mymint Patcha', 'Thip Bejay'];
     const FOCUS_ADMINS_BY_MONTH = {
-  '2026-09': ['Aon On', 'Mymint Patcha', 'Peem Pidchapa']
+        '2026-10': ['Mymint Patcha', 'Peem Pidchapa'],
+        '2026-09': ['Aon On', 'Mymint Patcha', 'Peem Pidchapa']
 };
 
 function getFocusAdminsForMonth(monthKey) {
@@ -7476,8 +8228,19 @@ function getFocusAdminsForMonth(monthKey) {
       return keys.length ? keys[keys.length - 1] : getBangkokTodayKey();
     }
 
-    function normalizePancakeLead(row, index = 0) {
-      const phone = normalizePhoneValue(pickField(row, ['SĐT', 'SDT', 'เบอร์', 'Phone', 'phone', 'เบอร์โทร']));
+   function normalizePancakeLead(row, index = 0) {
+  const phone = normalizePhoneValue(
+    pickField(row, [
+      'Phone & Status',
+      'Phone',
+      'phone',
+      'SDT',
+      'SĐT',
+      'เบอร์',
+      'เบอร์โทร'
+    ])
+  );
+
 
       // IMPORTANT: use Pancake's Oppo date / timestamp first.
       // Column B can display 05/01/2026, which is ambiguous. Oppo date is stable as 01-05-2026.
@@ -7702,6 +8465,7 @@ function getFocusAdminsForMonth(monthKey) {
     }
 
     function normalizeDashboardPayload(payload) {
+
       if (payload && payload.months) return payload;
 
       const requestedMonthKey = String(payload?.__requestedMonthKey || '').trim();
@@ -7736,16 +8500,7 @@ const crmRaw = Array.isArray(sheets[SHEET_CRM_NAME])
   monthsMap.get(key).push(row);
 });
 
-console.log('=== MONTH DEBUG ===');
-console.log('requestedMonthKey:', requestedMonthKey);
-console.log('pancakeRaw:', pancakeRaw.length);
-console.log('pancakeRows:', pancakeRows.length);
-console.log(
-  'monthsMap:',
-  Object.fromEntries(
-    Array.from(monthsMap.entries()).map(([key, rows]) => [key, rows.length])
-  )
-);
+
 
       if (!monthsMap.size) {
         monthsMap.set(requestedMonthKey || toMonthKey(new Date()), []);
@@ -7851,6 +8606,13 @@ function renderRecentLeads(rows) {
       </td>
       <td>${row.note || '-'}</td>
     `;
+
+    tr.style.cursor = 'pointer';
+
+tr.addEventListener('click', () => {
+  openLeadDetail(row);
+});
+
 
     tbody.appendChild(tr);
   });
@@ -8010,12 +8772,7 @@ const requestUrl =
 
   
 
-console.log(
-  'Loading dashboard:',
-  requestedMonthKey,
-  requestedSheetId,
-  requestUrl
-);
+
 
    const res = await fetch(requestUrl, {
   cache: 'no-store',
@@ -8032,14 +8789,7 @@ if (
   requestSeq !== dashboardRequestSeq ||
   monthSelect.value !== requestedMonthKey
 ) {
-  console.log(
-    'Ignore stale dashboard response:',
-    requestedMonthKey,
-    'current:',
-    monthSelect.value,
-    'seq:',
-    requestSeq
-  );
+
   return;
 }
 
@@ -8053,11 +8803,7 @@ if (
 
     try {
       newData = JSON.parse(cleanJson);
-      console.log('=== API RESPONSE CHECK ===');
-  console.log('Requested month:', requestedMonthKey);
-  console.log('Requested sheetId:', requestedSheetId);
-  console.log('API spreadsheetId:', newData.spreadsheetId);
-  console.log('API monthKey:', newData.__requestedMonthKey);
+     
  
     } catch (parseError) {
       console.error('API response:', textData);
@@ -8079,12 +8825,7 @@ if (
   requestSeq !== dashboardRequestSeq ||
   monthSelect.value !== requestedMonthKey
 ) {
-  console.log(
-    'STOP stale data before dashboardData assignment:',
-    requestedMonthKey,
-    'current:',
-    monthSelect.value
-  );
+ 
   return;
 }
 
@@ -8144,6 +8885,8 @@ if (!silent && requestSeq === dashboardRequestSeq) {
     `${loadedMonth} dashboard loaded successfully.`,
     'success'
   );
+  showDailySummaryPopup(dashboardData);
+  updateGoalStatusBadge(dashboardData);
 }
 
   } catch (error) {
@@ -8361,5 +9104,6 @@ renderDashboardFallback('September 2026 ready. Waiting for Google Sheets data...
     }
 
   </script>
+ 
 </body>
 </html> 
