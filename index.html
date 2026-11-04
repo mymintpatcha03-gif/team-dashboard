@@ -5988,8 +5988,10 @@ body, button, select, input, textarea {
 
   <div class="control-box">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg>
+
 <select id="monthSelect">
-  <option value="2026-10" selected>Oct 2026</option>
+  <option value="2026-11" selected>Nov 2026</option>
+  <option value="2026-10">Oct 2026</option>
   <option value="2026-09">Sep 2026</option>
   <option value="2026-08">Aug 2026</option>
   <option value="2026-07">Jul 2026</option>
@@ -5997,6 +5999,7 @@ body, button, select, input, textarea {
   <option value="2026-05">May 2026</option>
   <option value="2026-04">Apr 2026</option>
 </select>
+
   </div>
 
   <div class="control-box">
@@ -6254,11 +6257,15 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbx2GJYm47EI53aKt6E1uQMi
 // ======================================================
 
 // เดือนที่เปิด Dashboard แล้วให้แสดงเป็นค่าเริ่มต้น
-// Current default: October 2026 
-const DEFAULT_MONTH_KEY = '2026-10';
+// Current default: November 2026 
+const DEFAULT_MONTH_KEY = '2026-11';
 // Spreadsheet ID ของแต่ละเดือน
 // สำคัญ: ห้ามลบ ID เดือนเก่า เพราะใช้สำหรับเลือกดูข้อมูลย้อนหลัง
 const MONTH_SHEET_IDS = {
+
+// November 2026
+// Inbox Report - 2611
+'2026-11': '1x_8uaVLPSO0qROPDdLZY_nzhAqLIynKAcW8PQ0LbwYw',
 
     // October 2026
   // Inbox Report - 2610
@@ -6297,6 +6304,10 @@ const DEFAULT_TARGET = 1000;
 
 const MONTH_LEAD_TARGETS = {
 
+
+  // November 2026
+  '2026-11': 783,
+
   // October 2026
   '2026-10': 930,
 
@@ -6324,6 +6335,17 @@ const MONTH_LEAD_TARGETS = {
 const OVERVIEW_GOALS = { daily: 32, cr: 11, inboxMonthly: 1000 };
 
 const MONTH_OVERVIEW_GOALS = {
+
+
+  // November 2026
+'2026-11': {
+  label1: 'DAILY',
+  value1: 27,
+  label2: 'CR',
+  value2: '13%',
+  label3: 'INBOX / MONTH',
+  value3: 6022
+},
 
   // October 2026
   '2026-10': {
@@ -6992,7 +7014,8 @@ function renderMonthOptions(months) {  // เก็บเดือนที่�
     option.value = key;
    option.textContent = translateMonthLabel(
   normalizeMonthLabel(key)
-).replace('October', 'Oct')
+).replace('November', 'Nov')
+.replace('October', 'Oct')
  .replace('September', 'Sep')
  .replace('August', 'Aug')
  .replace('July', 'Jul')
@@ -7127,6 +7150,10 @@ function renderMonthOptions(months) {  // เก็บเดือนที่�
 const PROFILE_PHOTOS = {
   'aon': './aon.jpg',
   'aon on': './aon.jpg',
+
+
+  'bam': './Bam.jpg',
+'kanokwan boonmee': './Bam.jpg',
 
   'bay': './bayjpg.jpg',
   'bayjpg': './bayjpg.jpg',
@@ -7974,14 +8001,42 @@ const sortedItems = [...items]
     const SHEET_CRM_NAME = '1. data crm';
     const SHEET_PANCAKE_NAME = '3. data lead pancake ';
     const FOCUS_ADMINS = ['Aon On', 'Mymint Patcha', 'Thip Bejay'];
-    const FOCUS_ADMINS_BY_MONTH = {
-        '2026-10': ['Mymint Patcha', 'Peem Pidchapa'],
-        '2026-09': ['Aon On', 'Mymint Patcha', 'Peem Pidchapa']
+const FOCUS_ADMINS_BY_MONTH = {
+  '2026-11': ['Mymint Patcha', 'Peem Pidchapa', 'Kanokwan Boonmee'],
+  '2026-10': ['Mymint Patcha', 'Peem Pidchapa', 'Kanokwan Boonmee'],
+  '2026-09': ['Aon On', 'Mymint Patcha', 'Peem Pidchapa']
 };
 
 function getFocusAdminsForMonth(monthKey) {
   return FOCUS_ADMINS_BY_MONTH[monthKey] || FOCUS_ADMINS;
 }
+
+
+function filterDashboardLeadsByMonth(rows, monthKey) {
+  if (!['2026-10', '2026-11'].includes(monthKey)) {
+    return rows;
+  }
+
+  const admins = getFocusAdminsForMonth(monthKey);
+
+  const normalize = value =>
+    normalizeAdminNameForFocus(value)
+      .trim()
+      .toLowerCase();
+
+  const allowedAdmins = admins.map(normalize);
+
+  return (rows || []).filter(row => {
+    const owner = normalize(row.owner);
+    const creator = normalize(row.addedBy);
+
+    return (
+      allowedAdmins.includes(owner) ||
+      creator === 'palm praphatsorn'
+    );
+  });
+}
+
 
     function pickField(row, keys, fallback = '') {
       for (const key of keys) {
@@ -8026,6 +8081,12 @@ function getFocusAdminsForMonth(monthKey) {
     return 'Thip Bejay';
   }
 
+if (
+  lower.includes('palm praphatsorn') ||
+  lower.includes('palm')
+) {
+  return 'Palm Praphatsorn';
+}
   return name || 'Unknown';
 }
 
@@ -8543,15 +8604,29 @@ const crmRaw = Array.isArray(sheets[SHEET_CRM_NAME])
       };
 
       const months = {};
-      Array.from(monthsMap.entries()).forEach(([monthKey, rows]) => {
-        months[monthKey] = buildMonthObject(monthKey, rows);
-      });
+   
+Array.from(monthsMap.entries()).forEach(([monthKey, rows]) => {
+  const filteredRows =
+    filterDashboardLeadsByMonth(rows, monthKey);
+
+  months[monthKey] =
+    buildMonthObject(monthKey, filteredRows);
+});
+
 
       // Safety net for monthly files:
       // If we loaded a specific month sheet (ex. 2607) but Google date formatting parsed rows into another month,
       // also show those rows under the month selected in MONTH_SHEET_IDS. This does NOT affect June/May if they already parsed normally.
       if (requestedMonthKey && requestedMonthKey !== 'default' && !months[requestedMonthKey] && pancakeRows.length) {
-        months[requestedMonthKey] = buildMonthObject(requestedMonthKey, pancakeRows);
+       
+months[requestedMonthKey] = buildMonthObject(
+  requestedMonthKey,
+  filterDashboardLeadsByMonth(
+    pancakeRows,
+    requestedMonthKey
+  )
+);
+
       }
 
       const monthOrder = Object.keys(months).sort().reverse();
